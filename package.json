@@ -1,0 +1,26 @@
+{
+  "private": true,
+  "name": "polkastats-subsocial",
+  "description": "PolkaStats for Subsocial mono repo",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Colm3na/polkastats-subsocial.git"
+  },
+  "keywords": [
+    "blockchain",
+    "kusama",
+    "polkadot",
+    "substrate",
+    "PoS",
+    "validator"
+  ],
+  "author": "Mario Pino Uceda",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/Colm3na/polkastats-subsocial/issues"
+  },
+  "homepage": "https://github.com/Colm3na/polkastats-subsocial#readme",
+  "workspaces": ["frontend", "backend"],
+  "scripts": {}
+ }
+ 
