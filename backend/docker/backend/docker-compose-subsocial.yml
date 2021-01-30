@@ -7,7 +7,6 @@ services:
   substrate-node:
     image: dappforce/subsocial-node:3.2
     hostname: substrate-node
-    build: ./substrate-client
     volumes:
       - 'substrate-data:/data'
     ports:
