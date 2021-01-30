@@ -1,12 +1,14 @@
-# PolkaStats Next Gen
+# PolkaStats for Subsocial
+
+[PolkaStats](https://polkastats.io) block explorer for [Subsocial](https://subsocial.network/), an open platform for decentralized social networks and marketplaces.
 
 ## Install
 
 Install mono-repo:
 
 ```
-git clone https://github.com/Colm3na/polkastats-ng.git
-cd polkastats-ng
+git clone https://github.com/Colm3na/polkastats-subsocial.git
+cd polkastats-subsocial
 yarn
 ```
 
@@ -24,16 +26,8 @@ That will start a dev frontend with hot reload.
 
 You will need `nodejs`, `docker` and `docker-compose`:
 
-Polkadot:
-
 ```
-yarn workspace backend docker:polkadot
-```
-
-Kusama:
-
-```
-yarn workspace backend docker:kusama
+yarn workspace backend docker
 ```
 
 That will build and start all the required dockers automagically:
