@@ -85,10 +85,12 @@ module.exports = {
           api.query.timestamp.now.at(blockHash),
         ]);
 
+        const blockAuthor = blockHeader.author || '';
         const blockAuthorIdentity = await api.derive.accounts.info(blockHeader.author);
         const blockAuthorName = getDisplayName(blockAuthorIdentity.identity);
         const timestamp = Math.floor(timestampMs / 1000);
         const { parentHash, extrinsicsRoot, stateRoot } = blockHeader;
+        
 
         // Store block events
         try {
@@ -167,7 +169,7 @@ module.exports = {
             timestamp
           ) VALUES (
             '${endBlock}',
-            '${blockHeader.author}',
+            '${blockAuthor}',
             '${blockAuthorName}',
             '${blockHash}',
             '${parentHash}',

@@ -32,7 +32,7 @@ module.exports = {
       const { parentHash, extrinsicsRoot, stateRoot } = blockHeader;
 
       // Get block author
-      const blockAuthor = extendedHeader.author;
+      const blockAuthor = extendedHeader.author || '';
 
       // Get block author identity display name
       const blockAuthorIdentity = await api.derive.accounts.info(blockAuthor);
