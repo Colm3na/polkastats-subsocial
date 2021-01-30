@@ -21,22 +21,13 @@ module.exports = {
 
       // Parallelize
       const [
-        ChainCurrentIndex,
-        ChainActiveEra,
-        electionStatus,
         { block },
         extendedHeader,
       ] = await Promise.all([
-        api.query.session.currentIndex.at(blockHash),
-        api.query.staking.activeEra.at(blockHash),
-        api.query.staking.eraElectionStatus.at(blockHash),
         api.rpc.chain.getBlock(blockHash),
         api.derive.chain.getHeader(blockHash),
       ]);
 
-      // eslint-disable-next-line
-      const activeEra = ChainActiveEra.toJSON()['index'];
-      const sessionIndex = ChainCurrentIndex.toString();
       const { parentHash, extrinsicsRoot, stateRoot } = blockHeader;
 
       // Get block author
@@ -66,9 +57,6 @@ module.exports = {
         // Get block events
         const blockEvents = await api.query.system.events.at(blockHash);
 
-        // Get election status
-        const isElection = electionStatus.toString() !== 'Close';
-
         // Totals
         const totalEvents = blockEvents.length || 0;
         const totalExtrinsics = block.extrinsics.length;
@@ -86,9 +74,6 @@ module.exports = {
             parent_hash,
             extrinsics_root,
             state_root,
-            active_era,
-            session_index,
-            is_election,
             total_events,
             total_extrinsics,
             timestamp
@@ -100,9 +85,6 @@ module.exports = {
             '${parentHash}',
             '${extrinsicsRoot}',
             '${stateRoot}',
-            '${activeEra}',
-            '${sessionIndex}',
-            '${isElection}',
             '${totalEvents}',
             '${totalExtrinsics}',
             '${timestamp}'

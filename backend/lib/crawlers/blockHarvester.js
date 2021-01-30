@@ -77,28 +77,17 @@ module.exports = {
           blockEvents,
           blockHeader,
           timestampMs,
-          ChainCurrentIndex,
-          ChainActiveEra,
-          electionStatus,
         ] = await Promise.all([
           api.rpc.chain.getBlock(blockHash),
           api.query.system.events.at(blockHash),
           api.derive.chain.getHeader(blockHash),
           api.query.timestamp.now.at(blockHash),
-          api.query.session.currentIndex.at(blockHash),
-          api.query.staking.activeEra.at(blockHash),
-          api.query.staking.eraElectionStatus.at(blockHash),
         ]);
 
-        const activeEra = ChainActiveEra.toJSON().index;
-        const sessionIndex = ChainCurrentIndex.toString();
         const blockAuthorIdentity = await api.derive.accounts.info(blockHeader.author);
         const blockAuthorName = getDisplayName(blockAuthorIdentity.identity);
         const timestamp = Math.floor(timestampMs / 1000);
         const { parentHash, extrinsicsRoot, stateRoot } = blockHeader;
-
-        // Get election status
-        const isElection = electionStatus.toString() !== 'Close';
 
         // Store block events
         try {
@@ -172,9 +161,6 @@ module.exports = {
             parent_hash,
             extrinsics_root,
             state_root,
-            active_era,
-            session_index,
-            is_election,
             total_events,
             total_extrinsics,
             timestamp
@@ -186,9 +172,6 @@ module.exports = {
             '${parentHash}',
             '${extrinsicsRoot}',
             '${stateRoot}',
-            '${activeEra}',
-            '${sessionIndex}',
-            '${isElection}',
             '${totalEvents}',
             '${totalExtrinsics}',
             '${timestamp}'
