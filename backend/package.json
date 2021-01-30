@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "@polkadot/api": "^3.5.1",
+    "@subsocial/types": "^0.4.29",
     "axios": "^0.21.1",
     "bignumber.js": "^9.0.1",
     "dotenv": "^8.2.0",
