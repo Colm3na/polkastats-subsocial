@@ -173,12 +173,12 @@ export default {
 </script>
 
 <style>
+.last-transfers .table th,
+.last-transfers .table td {
+  padding: 0.45rem;
+}
 .last-transfers .table thead th {
   border-bottom: 0;
-}
-.last-transfers .table td,
-.last-transfers .table th {
-  padding: 0.45rem;
 }
 .last-transfers .identicon {
   display: inline-block;

@@ -2,7 +2,7 @@
   <div class="last-events">
     <div class="table-responsive">
       <b-table striped hover :fields="fields" :items="events">
-        <template v-slot:cell(block_number)="data">
+        <template #cell(block_number)="data">
           <p class="mb-0">
             <nuxt-link
               v-b-tooltip.hover
@@ -15,7 +15,7 @@
             </nuxt-link>
           </p>
         </template>
-        <template v-slot:cell(section)="data">
+        <template #cell(section)="data">
           <p class="mb-0">
             {{ data.item.section }} ➡
             {{ data.item.method }}
@@ -74,12 +74,12 @@ export default {
 </script>
 
 <style>
+.last-events .table th,
+.last-events .table td {
+  padding: 0.45rem;
+}
 .last-events .table thead th {
   border-bottom: 0;
-}
-.last-events .table td,
-.last-events .table th {
-  padding: 0.45rem;
 }
 .last-events .identicon {
   display: inline-block;

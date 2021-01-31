@@ -87,12 +87,12 @@ export default {
 </script>
 
 <style>
+.last-extrinsics .table th,
+.last-extrinsics .table td {
+  padding: 0.45rem;
+}
 .last-extrinsics .table thead th {
   border-bottom: 0;
-}
-.last-extrinsics .table td,
-.last-extrinsics .table th {
-  padding: 0.45rem;
 }
 .last-extrinsics .identicon {
   display: inline-block;
