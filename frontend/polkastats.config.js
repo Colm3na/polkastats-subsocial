@@ -11,7 +11,7 @@ export const networks = [
     backendWs: 'wss://subsocial.polkastats.io/api/v3',
     backendHttp: 'http://subsocial.polkastats.io/api/v3',
     googleAnalytics: '',
-    theme: './assets/scss/themes/subsocial.scss',
+    theme: '@/assets/scss/themes/subsocial.scss',
   },
 ]
 export const network = networks.find(({ name }) => name === selectedNetwork)

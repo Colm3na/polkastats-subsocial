@@ -79,6 +79,29 @@ export default {
     },
   },
 
-  // Build Configuration: https://go.nuxtjs.dev/config-build
-  build: {},
+  // Build Configuration (https://go.nuxtjs.dev/config-build)
+  build: {
+    extend(config) {
+      if (config.resolve.extensions) {
+        config.resolve.extensions.push('.mjs')
+      } else {
+        config.resolve.extensions = ['.mjs']
+      }
+      config.module.rules.push({
+        test: /\.mjs$/,
+        include: /node_modules/,
+        type: 'javascript/auto',
+      })
+    },
+  },
+
+  module: {
+    rules: [
+      {
+        test: /\.s[ac]ss$/i,
+        use: ['style-loader', 'css-loader', 'sass-loader'],
+        loader: 'vue-svg-loader',
+      },
+    ],
+  },
 }

@@ -256,6 +256,10 @@ pre {
 }
 
 // validator page
+.metric {
+  border: 1px solid $primary2;
+  padding: 1rem;
+}
 .validator-page .metric {
   min-height: 10rem;
 }
@@ -265,10 +269,6 @@ pre {
 .validator-page .verified {
   font-size: 2rem;
   cursor: pointer;
-}
-.metric {
-  border: 1px solid $primary2;
-  padding: 1rem;
 }
 .metric .description {
   color: $gray-600;
