@@ -1,10 +1,10 @@
-import { network } from "../polkastats.config.js";
-import { formatBalance, isHex } from "@polkadot/util";
+import { formatBalance, isHex } from '@polkadot/util'
+import BN from 'bn.js'
+import { network } from '../polkastats.config.js'
 formatBalance.setDefaults({
   decimals: network.decimalPlaces,
-  unit: network.denom
-});
-import BN from "bn.js";
+  unit: network.denom,
+})
 
 export default {
   methods: {
@@ -12,85 +12,85 @@ export default {
       if (isHex(number)) {
         return parseInt(number, 16)
           .toString()
-          .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
+          .replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
       } else {
-        return number.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
+        return number.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
       }
     },
     formatAmount(amount) {
-      let bn;
+      let bn
       if (isHex(amount)) {
-        bn = new BN(amount.substring(2, amount.length), 16);
+        bn = new BN(amount.substring(2, amount.length), 16)
       } else {
-        bn = new BN(amount.toString());
+        bn = new BN(amount.toString())
       }
-      return formatBalance(bn.toString(10));
+      return formatBalance(bn.toString(10))
     },
     shortAddress(address) {
       return (
-        address.substring(0, 5) + "…" + address.substring(address.length - 5)
-      );
+        address.substring(0, 5) + '…' + address.substring(address.length - 5)
+      )
     },
     shortHash(hash) {
-      return `${hash.substr(0, 6)}…${hash.substr(hash.length - 4, 4)}`;
+      return `${hash.substr(0, 6)}…${hash.substr(hash.length - 4, 4)}`
     },
     shortSessionId(sessionId) {
       return (
         sessionId.substring(0, 10) +
-        "…" +
+        '…' +
         sessionId.substring(sessionId.length - 10)
-      );
+      )
     },
     formatRewardDest(rewardDestination) {
       if (rewardDestination === 0) {
-        return `Stash account (increase stake)`;
+        return `Stash account (increase stake)`
       }
       if (rewardDestination === 1) {
-        return `Stash account (don't increase stake)`;
+        return `Stash account (don't increase stake)`
       }
       if (rewardDestination === 2) {
-        return `Controller account`;
+        return `Controller account`
       }
-      return rewardDestination;
+      return rewardDestination
     },
     getImOnlineMessage(validator) {
-      let message = "";
+      let message = ''
       if (validator.imOnline.isOnline) {
-        message = "Active with ";
+        message = 'Active with '
       } else {
-        message = "Inactive with ";
+        message = 'Inactive with '
       }
-      message = `${message} ${validator.imOnline.blockCount} blocks authored, `;
+      message = `${message} ${validator.imOnline.blockCount} blocks authored, `
       if (validator.imOnline.hasMessage) {
-        message = message + "has heartbeat message!";
+        message = message + 'has heartbeat message!'
       } else {
-        message = message + "no heartbeat message";
+        message = message + 'no heartbeat message'
       }
-      return message;
+      return message
     },
     getStakePercent(amount, totalStakeBonded) {
       if (isHex(totalStakeBonded)) {
         totalStakeBonded = new BN(
           totalStakeBonded.substring(2, totalStakeBonded.length),
           16
-        );
+        )
       } else {
-        totalStakeBonded = new BN(totalStakeBonded.toString(), 10);
+        totalStakeBonded = new BN(totalStakeBonded.toString(), 10)
       }
-      if (amount === 0 || totalStakeBonded.eq(new BN("0", 10))) {
-        return `0`;
+      if (amount === 0 || totalStakeBonded.eq(new BN('0', 10))) {
+        return `0`
       }
-      let amountBN;
+      let amountBN
       if (isHex(amount)) {
-        amountBN = new BN(amount.substring(2, amount.length), 16);
+        amountBN = new BN(amount.substring(2, amount.length), 16)
       } else {
-        amountBN = new BN(amount.toString(), 10);
+        amountBN = new BN(amount.toString(), 10)
       }
       const percent = amountBN
-        .mul(new BN("100000", 10))
+        .mul(new BN('100000', 10))
         .div(totalStakeBonded)
-        .toString(10);
-      return this.formatNumber(parseFloat(percent) / (1000).toFixed(3));
-    }
-  }
-};
+        .toString(10)
+      return this.formatNumber(parseFloat(percent) / (1000).toFixed(3))
+    },
+  },
+}
