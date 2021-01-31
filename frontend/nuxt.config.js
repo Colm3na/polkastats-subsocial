@@ -42,10 +42,20 @@ export default {
     'bootstrap-vue/nuxt',
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
+    // https://i18n.nuxtjs.org
+    'nuxt-i18n',
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {},
+
+  // i18n module configuration
+  i18n: {
+    messages: {
+      en: require('./locales/en.json'),
+      es: require('./locales/es.json'),
+    },
+  },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {},

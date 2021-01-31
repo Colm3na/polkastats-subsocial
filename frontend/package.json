@@ -25,11 +25,13 @@
     }
   },
   "dependencies": {
+    "@nuxtjs/apollo": "^4.0.1-rc.5",
     "@nuxtjs/axios": "^5.12.5",
     "bootstrap": "^4.5.3",
     "bootstrap-vue": "^2.21.2",
     "core-js": "^3.8.2",
-    "nuxt": "^2.14.12"
+    "nuxt": "^2.14.12",
+    "nuxt-i18n": "^6.18.0"
   },
   "devDependencies": {
     "@commitlint/cli": "^11.0.0",
