@@ -49,6 +49,8 @@ export default {
     '@nuxtjs/apollo',
     // https://github.com/nuxt-community/fontawesome-module
     '@nuxtjs/fontawesome',
+    // https://www.npmjs.com/package/nuxt-clipboard2
+    'nuxt-clipboard2',
   ],
 
   // Module configurations
@@ -92,6 +94,8 @@ export default {
         include: /node_modules/,
         type: 'javascript/auto',
       })
+      // https://github.com/nuxt/nuxt.js/issues/1142
+      config.resolve.alias.vue = 'vue/dist/vue.common'
     },
   },
 

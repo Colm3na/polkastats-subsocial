@@ -68,7 +68,7 @@
 <script>
 import gql from 'graphql-tag'
 import commonMixin from '@/mixins/commonMixin.js'
-import Identicon from '@/components/identicon.vue'
+import Identicon from '@/components/Identicon.vue'
 
 export default {
   components: {
@@ -104,34 +104,34 @@ export default {
     }
   },
   created() {
-    const vm = this
-    // Force update of identity list if empty
-    if (this.$store.state.identities.list.length === 0) {
-      vm.$store.dispatch('identities/update')
-    }
-    // Update data every 60 seconds
-    this.polling = setInterval(() => {
-      vm.$store.dispatch('identities/update')
-    }, 60000)
+    // const vm = this
+    // // Force update of identity list if empty
+    // if (this.$store.state.identities.list.length === 0) {
+    //   vm.$store.dispatch('identities/update')
+    // }
+    // // Update data every 60 seconds
+    // this.polling = setInterval(() => {
+    //   vm.$store.dispatch('identities/update')
+    // }, 60000)
   },
   methods: {
     getDisplayName(accountId) {
-      let identity = this.$store.state.identities.list.find(
-        (identity) => identity.accountId === accountId
-      )
-      if (identity) {
-        identity = identity.identity
-        if (
-          identity.displayParent &&
-          identity.displayParent !== `` &&
-          identity.display &&
-          identity.display !== ``
-        ) {
-          return `${identity.displayParent} / ${identity.display}`
-        } else {
-          return identity.display
-        }
-      }
+      // let identity = this.$store.state.identities.list.find(
+      //   (identity) => identity.accountId === accountId
+      // )
+      // if (identity) {
+      //   identity = identity.identity
+      //   if (
+      //     identity.displayParent &&
+      //     identity.displayParent !== `` &&
+      //     identity.display &&
+      //     identity.display !== ``
+      //   ) {
+      //     return `${identity.displayParent} / ${identity.display}`
+      //   } else {
+      //     return identity.display
+      //   }
+      // }
       return ``
     },
   },

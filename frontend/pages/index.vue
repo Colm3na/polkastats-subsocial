@@ -33,13 +33,13 @@
             <h3>
               <nuxt-link
                 v-b-tooltip.hover
-                :to="`/transfers`"
-                title="Click to see last transfers"
+                :to="`/extrinsics`"
+                title="Click to see last extrinsics"
               >
-                Recent extrinsics
+                Last extrinsics
               </nuxt-link>
             </h3>
-            <LastTransfers />
+            <LastExtrinsics />
           </div>
           <div class="col-md-6 mb-4">
             <h3>
@@ -48,7 +48,7 @@
                 :to="`/events`"
                 title="Click to see last events"
               >
-                Recent events
+                Last events
               </nuxt-link>
             </h3>
             <LastEvents />
@@ -59,17 +59,17 @@
   </div>
 </template>
 <script>
-import LastBlocks from '../components/LastBlocks.vue'
-import LastEvents from '../components/LastEvents.vue'
-import LastTransfers from '../components/LastTransfers.vue'
-import Top10Rich from '../components/Top10Rich.vue'
-import { network } from '../polkastats.config.js'
+import LastBlocks from '@/components/LastBlocks.vue'
+import LastEvents from '@/components/LastEvents.vue'
+import LastExtrinsics from '@/components/LastExtrinsics.vue'
+import Top10Rich from '@/components/Top10Rich.vue'
+import { network } from '@/polkastats.config.js'
 
 export default {
   components: {
     LastBlocks,
     LastEvents,
-    LastTransfers,
+    LastExtrinsics,
     Top10Rich,
   },
   data: () => {

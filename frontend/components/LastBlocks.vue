@@ -47,7 +47,7 @@
 
 <script>
 import commonMixin from '@/mixins/commonMixin.js'
-import Identicon from '@/components/identicon.vue'
+import Identicon from '@/components/Identicon.vue'
 import gql from 'graphql-tag'
 
 export default {

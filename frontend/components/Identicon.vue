@@ -26,7 +26,7 @@ export default {
       type: String,
       default: () => '',
     },
-    thme: {
+    theme: {
       type: String,
       default: () => 'substrate',
     },
@@ -37,12 +37,12 @@ export default {
   },
   methods: {
     showToast() {
-      this.$bvToast.toast(this.address, {
-        title: 'Address copied to clipboard!',
-        variant: 'secondary',
-        autoHideDelay: 5000,
-        appendToast: false,
-      })
+      // this.$bvToast.toast(this.address, {
+      //   title: 'Address copied to clipboard!',
+      //   variant: 'secondary',
+      //   autoHideDelay: 5000,
+      //   appendToast: false,
+      // })
     },
   },
 }
