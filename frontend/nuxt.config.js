@@ -1,3 +1,4 @@
+import { network } from './polkastats.config.js'
 export default {
   // Disable server-side rendering: https://go.nuxtjs.dev/ssr-mode
   ssr: false,
@@ -44,6 +45,8 @@ export default {
     '@nuxtjs/axios',
     // https://i18n.nuxtjs.org
     'nuxt-i18n',
+    // https://github.com/nuxt-community/apollo-module
+    '@nuxtjs/apollo',
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
@@ -54,6 +57,17 @@ export default {
     messages: {
       en: require('./locales/en.json'),
       es: require('./locales/es.json'),
+    },
+  },
+
+  // Apollo module configuration
+  apollo: {
+    clientConfigs: {
+      default: {
+        httpEndpoint: network.backendHttp,
+        wsEndpoint: network.backendWs,
+        websocketsOnly: true,
+      },
     },
   },
 

@@ -1,4 +1,4 @@
-const selectedNetwork = 'subsocial'
+const selectedNetwork = 'Subsocial'
 export const networks = [
   {
     id: 'subsocial',
