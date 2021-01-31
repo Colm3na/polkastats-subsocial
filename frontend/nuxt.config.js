@@ -20,8 +20,8 @@ export default {
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
   },
 
-  // Global CSS: https://go.nuxtjs.dev/config-css
-  css: [],
+  // Global CSS (https://go.nuxtjs.dev/config-css)
+  css: [network.theme],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [],
@@ -47,20 +47,18 @@ export default {
     'nuxt-i18n',
     // https://github.com/nuxt-community/apollo-module
     '@nuxtjs/apollo',
+    // https://github.com/nuxt-community/fontawesome-module
+    '@nuxtjs/fontawesome',
   ],
 
-  // Axios module configuration: https://go.nuxtjs.dev/config-axios
+  // Module configurations
   axios: {},
-
-  // i18n module configuration
   i18n: {
     messages: {
       en: require('./locales/en.json'),
       es: require('./locales/es.json'),
     },
   },
-
-  // Apollo module configuration
   apollo: {
     clientConfigs: {
       default: {
@@ -68,6 +66,16 @@ export default {
         wsEndpoint: network.backendWs,
         websocketsOnly: true,
       },
+    },
+  },
+  bootstrapVue: {
+    bootstrapCSS: false,
+    bootstrapVueCSS: false,
+  },
+  fontawesome: {
+    icons: {
+      solid: true,
+      regular: true,
     },
   },
 
