@@ -9,7 +9,7 @@
       :key="address"
       v-clipboard:copy="address"
       :size="size"
-      :theme="config.identiconTheme"
+      :theme="theme"
       :value="address"
       class="identicon"
     />
@@ -17,8 +17,6 @@
 </template>
 <script>
 import Identicon from '@polkadot/vue-identicon'
-// eslint-disable-next-line
-import { config } from '@/config.js'
 export default {
   components: {
     Identicon,
@@ -28,15 +26,14 @@ export default {
       type: String,
       default: () => '',
     },
+    thme: {
+      type: String,
+      default: () => 'substrate',
+    },
     size: {
       type: Number,
       default: () => 20,
     },
-  },
-  data() {
-    return {
-      config,
-    }
   },
   methods: {
     showToast() {
