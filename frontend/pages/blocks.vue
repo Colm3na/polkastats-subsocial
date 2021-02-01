@@ -75,13 +75,11 @@
 <script>
 import gql from 'graphql-tag'
 import commonMixin from '@/mixins/commonMixin.js'
-import Identicon from '@/components/Identicon.vue'
 import Loading from '@/components/Loading.vue'
 import { network, paginationOptions } from '@/polkastats.config.js'
 
 export default {
   components: {
-    Identicon,
     Loading,
   },
   mixins: [commonMixin],
