@@ -9,7 +9,7 @@
       :key="address"
       v-clipboard:copy="address"
       :size="size"
-      :theme="theme"
+      :theme="'substrate'"
       :value="address"
       class="identicon"
     />

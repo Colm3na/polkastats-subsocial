@@ -19,13 +19,13 @@
             <h3>
               <nuxt-link
                 v-b-tooltip.hover
-                :to="`/accounts`"
-                title="Click to see all active accounts"
+                :to="`/activity`"
+                title="Click to see last activity"
               >
-                Top rich
+                Last activity
               </nuxt-link>
             </h3>
-            <Top10Rich />
+            <LastActivity />
           </div>
         </div>
         <div class="row">
@@ -60,17 +60,19 @@
 </template>
 <script>
 import LastBlocks from '@/components/LastBlocks.vue'
-import LastEvents from '@/components/LastEvents.vue'
+import LastActivity from '@/components/LastActivity.vue'
 import LastExtrinsics from '@/components/LastExtrinsics.vue'
-import Top10Rich from '@/components/Top10Rich.vue'
+import LastEvents from '@/components/LastEvents.vue'
+// import Top10Rich from '@/components/Top10Rich.vue'
 import { network } from '@/polkastats.config.js'
 
 export default {
   components: {
     LastBlocks,
-    LastEvents,
+    LastActivity,
     LastExtrinsics,
-    Top10Rich,
+    LastEvents,
+    // Top10Rich,
   },
   data: () => {
     return {

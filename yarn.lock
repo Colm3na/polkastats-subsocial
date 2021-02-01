@@ -2382,10 +2382,10 @@
     "@types/bn.js" "^4.11.6"
     bn.js "^4.11.9"
 
-"@polkadot/ui-shared@0.67.1":
-  version "0.67.1"
-  resolved "https://registry.yarnpkg.com/@polkadot/ui-shared/-/ui-shared-0.67.1.tgz#58cfbf64259fde5570efd13906ef3438c19fbf57"
-  integrity sha512-CTy3xjxsdCZyzVtdgJf5yTMGeLQe3YULZDII8bSQiejYfI+NPsSOv3uuOG244V8EZE6QoNG9fLzfwNpKDecePg==
+"@polkadot/ui-shared@0.68.1":
+  version "0.68.1"
+  resolved "https://registry.yarnpkg.com/@polkadot/ui-shared/-/ui-shared-0.68.1.tgz#6af0e4f33961bf5e9802f1041074d461d93444fe"
+  integrity sha512-QFnWquop9T6L6Ol0j9zTPuDl3DJJdIIjaAikN7xrTMlroY/l3k2+IqmNv2nAFPEhPGpga38W41y56bbNw4uhdg==
   dependencies:
     "@babel/runtime" "^7.12.5"
     color "^3.1.3"
@@ -2411,7 +2411,7 @@
     tweetnacl "^1.0.3"
     xxhashjs "^0.2.2"
 
-"@polkadot/util-crypto@^5.4.4":
+"@polkadot/util-crypto@^5.5.1":
   version "5.5.1"
   resolved "https://registry.yarnpkg.com/@polkadot/util-crypto/-/util-crypto-5.5.1.tgz#3b9afe44e1fd3db1985e3796184184260706ed53"
   integrity sha512-0eAv9YnpOfDaiyItEgqizOrMqy7i/BDUDMuMoIg9/HjjTRGFXW7htzYRnNwxh6yCRH5MNoz05JPlzCZTqyg7Rw==
@@ -2445,7 +2445,7 @@
     camelcase "^5.3.1"
     ip-regex "^4.2.0"
 
-"@polkadot/util@5.5.1", "@polkadot/util@^5.4.4":
+"@polkadot/util@5.5.1", "@polkadot/util@^5.5.1":
   version "5.5.1"
   resolved "https://registry.yarnpkg.com/@polkadot/util/-/util-5.5.1.tgz#4d082f5d99a1e3a4f7a8081ebcf87b40a58219d8"
   integrity sha512-XcnJTh4lLvVD452pNOSWT5wgvjYWFItCjU5/Mf5yasV64gFTBz0242vHAu+RMMCDpj62tIaBrdHPtCzrFtsvQA==
@@ -2458,15 +2458,15 @@
     camelcase "^5.3.1"
     ip-regex "^4.3.0"
 
-"@polkadot/vue-identicon@^0.67.1":
-  version "0.67.1"
-  resolved "https://registry.yarnpkg.com/@polkadot/vue-identicon/-/vue-identicon-0.67.1.tgz#bb9ad51ffa7f7057abab30bb205ba372d3644620"
-  integrity sha512-P+8nQYRF5Xj2JRww4zyk9xn0TAYsLJBGdTXJan3qIOIm6s5173twVGFgDrl+Top6jFsvg1ohjLFr3RnsxVV3QQ==
+"@polkadot/vue-identicon@^0.68.1":
+  version "0.68.1"
+  resolved "https://registry.yarnpkg.com/@polkadot/vue-identicon/-/vue-identicon-0.68.1.tgz#b32ae1499c886db1bb65e3d271a29910cff0d593"
+  integrity sha512-TophjgI20NVeAEzzkviiDxW0UPWuN9M/YkhhZdjbhnlZhhfAeNK5pC+9KHlETwSVZ+ZHfBRS4HWS8+56FUpFjA==
   dependencies:
     "@babel/runtime" "^7.12.5"
-    "@polkadot/ui-shared" "0.67.1"
-    "@polkadot/util" "^5.4.4"
-    "@polkadot/util-crypto" "^5.4.4"
+    "@polkadot/ui-shared" "0.68.1"
+    "@polkadot/util" "^5.5.1"
+    "@polkadot/util-crypto" "^5.5.1"
     jdenticon "3.1.0"
 
 "@polkadot/wasm-crypto-asmjs@^3.1.1":
