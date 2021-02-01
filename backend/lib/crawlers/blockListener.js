@@ -2,7 +2,7 @@
 const { ApiPromise, WsProvider } = require('@polkadot/api');
 const { types } = require('@subsocial/types/substrate/preparedTypes');
 const pino = require('pino');
-const { shortHash, storeExtrinsics, getDisplayName } = require('../utils.js');
+const { shortHash, storeExtrinsics, getDisplayName, updateTotals } = require('../utils.js');
 
 const logger = pino();
 const loggerOptions = {
@@ -164,6 +164,9 @@ module.exports = {
         } catch (error) {
           logger.error(loggerOptions, `Error updating finalized block: ${error}, sql: ${sql}`);
         }
+
+        // update totals
+        updateTotals(pool, loggerOptions);
       }
     });
   },
