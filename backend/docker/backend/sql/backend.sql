@@ -46,6 +46,22 @@ CREATE TABLE IF NOT EXISTS extrinsic (
   PRIMARY KEY ( block_number, extrinsic_index ) 
 );
 
+CREATE TABLE IF NOT EXISTS account  (  
+  account_id TEXT NOT NULL,
+  identity TEXT NOT NULL,
+  identity_display TEXT NOT NULL,
+  identity_display_parent TEXT NOT NULL,
+  balances TEXT NOT NULL,
+  available_balance BIGINT NOT NULL,
+  free_balance BIGINT NOT NULL,
+  locked_balance BIGINT NOT NULL,
+  nonce BIGINT NOT NULL,
+  timestamp BIGINT NOT NULL,
+  block_height BIGINT NOT NULL,
+  is_staking BOOLEAN NOT NULL,
+  PRIMARY KEY ( account_id )  
+);
+
 CREATE INDEX IF NOT EXISTS extrinsic_section_idx ON extrinsic (section);
 CREATE INDEX IF NOT EXISTS extrinsic_method_idx ON extrinsic (method);
 CREATE INDEX IF NOT EXISTS extrinsic_signer_idx ON extrinsic (signer);
@@ -54,4 +70,4 @@ GRANT ALL PRIVILEGES ON TABLE block TO polkastats;
 GRANT ALL PRIVILEGES ON TABLE harvester_error TO polkastats;
 GRANT ALL PRIVILEGES ON TABLE event TO polkastats;
 GRANT ALL PRIVILEGES ON TABLE extrinsic TO polkastats;
-GRANT ALL PRIVILEGES ON TABLE ranking TO polkastats;
+GRANT ALL PRIVILEGES ON TABLE account TO polkastats;

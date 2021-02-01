@@ -2,7 +2,9 @@
 const { ApiPromise, WsProvider } = require('@polkadot/api');
 const { types } = require('@subsocial/types/substrate/preparedTypes');
 const pino = require('pino');
-const { shortHash, storeExtrinsics, getDisplayName, wait } = require('../utils.js');
+const {
+  shortHash, storeExtrinsics, getDisplayName, wait,
+} = require('../utils.js');
 
 const logger = pino();
 const loggerOptions = {
@@ -90,7 +92,6 @@ module.exports = {
         const blockAuthorName = getDisplayName(blockAuthorIdentity.identity);
         const timestamp = Math.floor(timestampMs / 1000);
         const { parentHash, extrinsicsRoot, stateRoot } = blockHeader;
-        
 
         // Store block events
         try {
