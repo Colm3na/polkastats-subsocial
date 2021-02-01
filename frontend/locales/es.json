@@ -492,8 +492,8 @@
     "block": {
       "block": "bloque",
       "block_author": "Autor del bloque",
-      "account_details": "Detalles de la cuenta",
       "block_hash": "Hash del bloque",
+      "finalized": "Finalizado",
       "extrinsic_root": "Raíz extrínseca",
       "parent_hash": "Hash padre",
       "state_root": "State root",

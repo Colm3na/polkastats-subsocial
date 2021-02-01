@@ -491,6 +491,7 @@
       "block": "block",
       "block_author": "Block author",
       "block_hash": "Block hash",
+      "finalized": "Finalized",
       "extrinsic_root": "Extrinsic root",
       "parent_hash": "Parent hash",
       "state_root": "State root",

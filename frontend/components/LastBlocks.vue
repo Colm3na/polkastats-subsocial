@@ -13,30 +13,17 @@
             </nuxt-link>
           </p>
         </template>
+        <template #cell(finalized)="data">
+          <p v-if="data.item.finalized" class="mb-0">
+            <font-awesome-icon icon="check" class="text-success" />
+          </p>
+          <p v-else class="mb-0">
+            <font-awesome-icon icon="clock" class="text-light" />
+          </p>
+        </template>
         <template #cell(block_hash)="data">
           <p class="mb-0">
             {{ shortHash(data.item.block_hash) }}
-          </p>
-        </template>
-        <template #cell(block_author)="data">
-          <p class="mb-0 d-inline-block">
-            <Identicon
-              :key="data.item.block_author"
-              :address="data.item.block_author"
-              :size="20"
-            />
-            <nuxt-link
-              v-b-tooltip.hover
-              :to="`/validator?accountId=${data.item.block_author}`"
-              title="Check validator information"
-            >
-              <span v-if="data.item.block_author_name">
-                {{ data.item.block_author_name }}
-              </span>
-              <span v-else>
-                {{ shortAddress(data.item.block_author) }}
-              </span>
-            </nuxt-link>
           </p>
         </template>
       </b-table>
@@ -46,13 +33,9 @@
 
 <script>
 import commonMixin from '@/mixins/commonMixin.js'
-import Identicon from '@/components/Identicon.vue'
 import gql from 'graphql-tag'
 
 export default {
-  components: {
-    Identicon,
-  },
   mixins: [commonMixin],
   data: () => {
     return {
@@ -64,14 +47,13 @@ export default {
           sortable: true,
         },
         {
-          key: 'block_hash',
-          label: 'Hash',
-          class: 'd-none d-sm-none d-md-none d-lg-block d-xl-block',
+          key: 'finalized',
+          label: 'Finalized',
           sortable: true,
         },
         {
-          key: 'block_author',
-          label: 'Author',
+          key: 'block_hash',
+          label: 'Hash',
           sortable: true,
         },
       ],
@@ -84,9 +66,8 @@ export default {
           subscription blocks {
             block(order_by: { block_number: desc }, where: {}, limit: 10) {
               block_number
+              finalized
               block_hash
-              block_author
-              block_author_name
             }
           }
         `,

@@ -17,40 +17,21 @@
               <table class="table table-striped block-table">
                 <tbody>
                   <tr>
-                    <td>{{ $t('details.block.block_author') }}</td>
-                    <td class="text-right">
-                      <span v-if="parsedBlock.block_number === 0">
-                        {{ $t('details.block.genesis') }}
-                      </span>
-                      <span v-else>
-                        <nuxt-link
-                          :to="`/account/${parsedBlock.block_author}`"
-                          class="d-block"
-                        >
-                          <Identicon
-                            :key="parsedBlock.block_author"
-                            :value="parsedBlock.block_author"
-                            :size="20"
-                            :theme="'polkadot'"
-                          />
-                          <span
-                            v-b-tooltip.hover
-                            :title="$t('details.block.account_details')"
-                          >
-                            {{ shortAddress(parsedBlock.block_author) }}
-                          </span>
-                          <span v-if="parsedBlock.block_author_name !== ``"
-                            >[ {{ parsedBlock.block_author_name }} ]</span
-                          >
-                        </nuxt-link>
-                      </span>
-                    </td>
-                  </tr>
-                  <tr>
                     <td>{{ $t('details.block.timestamp') }}</td>
                     <td class="text-right">
                       <p class="mb-0">
                         {{ getDateFromTimestamp(parsedBlock.timestamp) }}
+                      </p>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>{{ $t('details.block.finalized') }}</td>
+                    <td class="text-right">
+                      <p v-if="parsedBlock.finalized" class="mb-0">
+                        <font-awesome-icon icon="check" class="text-success" />
+                      </p>
+                      <p v-else class="mb-0">
+                        <font-awesome-icon icon="clock" class="text-light" />
                       </p>
                     </td>
                   </tr>
@@ -225,31 +206,6 @@
                     </table>
                   </template>
                 </b-tab>
-                <!-- <b-tab>
-                  <template #title>
-                    <h5>{{ $t('details.block.logs') }}</h5>
-                  </template>
-                  <template v-if="parsedLogs.length > 0">
-                    <div class="card mt-4 mb-3">
-                      <table class="table table-striped">
-                        <thead>
-                          <tr>
-                            <th>{{ $t('details.block.index') }}</th>
-                            <th>{{ $t('details.block.engine') }}</th>
-                            <th>{{ $t('details.block.data') }}</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr v-for="log in parsedLogs" :key="log.log_index">
-                            <td>{{ log.log_index }}</td>
-                            <td>{{ log.engine }}</td>
-                            <td>{{ log.data }}</td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div>
-                  </template>
-                </b-tab> -->
               </b-tabs>
             </div>
           </div>
@@ -319,6 +275,7 @@ export default {
         query block($block_number: bigint!) {
           block(where: { block_number: { _eq: $block_number } }) {
             block_author
+            finalized
             block_author_name
             block_hash
             block_number
