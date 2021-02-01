@@ -24,10 +24,15 @@ module.exports = {
       const [
         { block },
         extendedHeader,
+        finalizedBlockHash,
       ] = await Promise.all([
         api.rpc.chain.getBlock(blockHash),
         api.derive.chain.getHeader(blockHash),
+        api.rpc.chain.getFinalizedHead(),
       ]);
+
+      const finalizedBlockHeader = await api.rpc.chain.getHeader(finalizedBlockHash);
+      const finalizedBlock = finalizedBlockHeader.number.toNumber();
 
       const { parentHash, extrinsicsRoot, stateRoot } = blockHeader;
 
@@ -69,6 +74,7 @@ module.exports = {
 
         sql = `INSERT INTO block (
             block_number,
+            finalized,
             block_author,
             block_author_name,
             block_hash,
@@ -80,6 +86,7 @@ module.exports = {
             timestamp
           ) VALUES (
             '${blockNumber}',
+            false,
             '${blockAuthor}',
             '${blockAuthorName}',
             '${blockHash}',
@@ -148,6 +155,15 @@ module.exports = {
             }
           }
         });
+
+        // update finalized blocks
+        sql = `UPDATE block SET finalized = true WHERE block_number < ${finalizedBlock}`;
+        try {
+          await pool.query(sql);
+          logger.info(loggerOptions, `Last finalized block updated to #${finalizedBlock}`);
+        } catch (error) {
+          logger.error(loggerOptions, `Error updating finalized block: ${error}, sql: ${sql}`);
+        }
       }
     });
   },

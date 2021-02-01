@@ -159,6 +159,7 @@ module.exports = {
 
         const sqlInsert = `INSERT INTO block (
             block_number,
+            finalized,
             block_author,
             block_author_name,
             block_hash,
@@ -170,6 +171,7 @@ module.exports = {
             timestamp
           ) VALUES (
             '${endBlock}',
+            false,
             '${blockAuthor}',
             '${blockAuthorName}',
             '${blockHash}',

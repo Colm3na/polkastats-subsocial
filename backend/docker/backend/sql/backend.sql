@@ -2,6 +2,7 @@ GRANT ALL PRIVILEGES ON DATABASE polkastats TO polkastats;
 
 CREATE TABLE IF NOT EXISTS block (  
   block_number BIGINT NOT NULL,
+  finalized BOOLEAN NOT NULL,
   block_author TEXT NOT NULL,
   block_author_name TEXT NOT NULL,
   block_hash TEXT NOT NULL,
@@ -61,6 +62,14 @@ CREATE TABLE IF NOT EXISTS account  (
   PRIMARY KEY ( account_id )  
 );
 
+CREATE TABLE IF NOT EXISTS total (  
+  name TEXT,
+  count BIGINT NOT NULL,
+  PRIMARY KEY ( name )
+);
+
+INSERT INTO total (name, count) VALUES ('blocks', 0),('extrinsics', 0),('transfers', 0),('events', 0);
+
 CREATE INDEX IF NOT EXISTS extrinsic_section_idx ON extrinsic (section);
 CREATE INDEX IF NOT EXISTS extrinsic_method_idx ON extrinsic (method);
 CREATE INDEX IF NOT EXISTS extrinsic_signer_idx ON extrinsic (signer);
@@ -70,3 +79,4 @@ GRANT ALL PRIVILEGES ON TABLE harvester_error TO polkastats;
 GRANT ALL PRIVILEGES ON TABLE event TO polkastats;
 GRANT ALL PRIVILEGES ON TABLE extrinsic TO polkastats;
 GRANT ALL PRIVILEGES ON TABLE account TO polkastats;
+GRANT ALL PRIVILEGES ON TABLE total TO polkastats;
