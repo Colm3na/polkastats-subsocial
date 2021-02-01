@@ -29,19 +29,6 @@ const fetchAccountIdentity = async (accountId, api) => {
   return info.identity;
 };
 
-const fetchValidators = async (api) => {
-  const validators = await api.query.staking.validators.keys();
-  return getAccountId(validators);
-};
-
-const fetchAccountStaking = async (accountId, api, validators) => {
-  if (validators.includes(accountId)) {
-    return true;
-  }
-  const staking = await api.query.staking.nominators(accountId);
-  return !staking.isEmpty;
-};
-
 const fetchAccountBalance = async (accountId, api) => {
   const balance = await api.derive.balances.all(accountId);
   return balance;
@@ -87,7 +74,7 @@ const makeState = prepareState('account', buildAccount);
  */
 const makeQuery = (state, block, timestamp) => {
   const {
-    id, identity, balances, isStaking,
+    id, identity, balances,
   } = state.account;
   const availableBalance = balances.availableBalance.toString();
   const freeBalance = balances.freeBalance.toString();
@@ -97,18 +84,17 @@ const makeQuery = (state, block, timestamp) => {
   const JSONIdentity = identity.display ? JSON.stringify(identity) : '';
   const JSONbalances = JSON.stringify(balances);
   const nonce = balances.accountNonce.toString();
-  const query = `                                                                                                                                                                                                                      \
-    INSERT INTO   account (account_id, identity, identity_display, identity_display_parent, balances, available_balance, free_balance, locked_balance, nonce, timestamp, block_height, is_staking)                                     \
-    VALUES        ('${id}', '${JSONIdentity}', '${identityDisplay}', '${identityDisplayParent}', '${JSONbalances}', '${availableBalance}', '${freeBalance}', '${lockedBalance}', '${nonce}', '${timestamp}', '${block}', ${isStaking}) \
-    ON CONFLICT   (account_id)                                                                                                                                                                                                         \
-    DO UPDATE                                                                                                                                                                                                                          \
-    SET           identity = EXCLUDED.identity,                                                                                                                                                                                        \
-                  balances = EXCLUDED.balances,                                                                                                                                                                                        \
-                  available_balance = EXCLUDED.available_balance,                                                                                                                                                                      \
-                  free_balance = EXCLUDED.free_balance,                                                                                                                                                                                \
-                  timestamp = EXCLUDED.timestamp,                                                                                                                                                                                      \
-                  is_staking = EXCLUDED.is_staking,                                                                                                                                                                                    \
-                  block_height = EXCLUDED.block_height;                                                                                                                                                                                \
+  const query = `
+    INSERT INTO   account (account_id, identity, identity_display, identity_display_parent, balances, available_balance, free_balance, locked_balance, nonce, timestamp, block_height)
+    VALUES        ('${id}', '${JSONIdentity}', '${identityDisplay}', '${identityDisplayParent}', '${JSONbalances}', '${availableBalance}', '${freeBalance}', '${lockedBalance}', '${nonce}', '${timestamp}', '${block}')
+    ON CONFLICT   (account_id)
+    DO UPDATE
+    SET           identity = EXCLUDED.identity,
+                  balances = EXCLUDED.balances,
+                  available_balance = EXCLUDED.available_balance,
+                  free_balance = EXCLUDED.free_balance,
+                  timestamp = EXCLUDED.timestamp,
+                  block_height = EXCLUDED.block_height;
   `;
 
   return { ...state, query };
@@ -138,25 +124,18 @@ const execQuery = (state, pool) => {
  */
 const exec = async (api, pool) => {
   logger.info(loggerOptions, 'Running active accounts crawler...');
-
   const timestamp = Date.now();
   const block = await fetchBlockNumber(api);
-  const validators = await fetchValidators(api);
-
   const accountIds = await fetchAccountIds(api);
-
   const accountsIdentity = await Promise.all(
     accountIds.map((id) => fetchAccountIdentity(id, api)),
   );
   const accountsBalances = await Promise.all(
     accountIds.map((id) => fetchAccountBalance(id, api)),
   );
-  const accountsStaking = await Promise.all(
-    accountIds.map((id) => fetchAccountStaking(id, api, validators)),
-  );
 
   await Promise.all(
-    makeState([accountIds, accountsIdentity, accountsBalances, accountsStaking])
+    makeState([accountIds, accountsIdentity, accountsBalances])
       .map((state) => makeQuery(state, block, timestamp))
       .map((state) => execQuery(state, pool))
       .map((state) => state.queryResult), // Pick the promise to await
