@@ -166,7 +166,7 @@ module.exports = {
         }
 
         // update totals
-        updateTotals(pool, loggerOptions);
+        await updateTotals(pool, loggerOptions);
       }
     });
   },
