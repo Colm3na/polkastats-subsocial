@@ -157,7 +157,7 @@ module.exports = {
         });
 
         // update finalized blocks
-        sql = `UPDATE block SET finalized = true WHERE block_number < ${finalizedBlock}`;
+        sql = `UPDATE block SET finalized = true WHERE finalized = false AND block_number <= ${finalizedBlock}`;
         try {
           await pool.query(sql);
           logger.info(loggerOptions, `Last finalized block updated to #${finalizedBlock}`);
@@ -166,7 +166,7 @@ module.exports = {
         }
 
         // update totals
-        await updateTotals(pool, loggerOptions);
+        updateTotals(pool, loggerOptions);
       }
     });
   },
