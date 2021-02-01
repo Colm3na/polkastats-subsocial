@@ -85,62 +85,6 @@
                       <p class="mb-0">{{ parsedBlock.state_root }}</p>
                     </td>
                   </tr>
-                  <tr>
-                    <td>{{ $t('details.block.spec_name') }}</td>
-                    <td class="text-right">
-                      <p class="mb-0">{{ parsedBlock.spec_name }}</p>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>{{ $t('details.block.spec_version') }}</td>
-                    <td class="text-right">
-                      <p class="mb-0">{{ parsedBlock.spec_version }}</p>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>{{ $t('details.block.current_session_index') }}</td>
-                    <td class="text-right">
-                      <p class="mb-0">{{ parsedBlock.current_index }}</p>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>{{ $t('details.block.session_length') }}</td>
-                    <td class="text-right">
-                      <p class="mb-0">{{ parsedBlock.session_length }}</p>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>{{ $t('details.block.session_per_era') }}</td>
-                    <td class="text-right">
-                      <p class="mb-0">{{ parsedBlock.session_per_era }}</p>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>{{ $t('details.block.session_progress') }}</td>
-                    <td class="text-right">
-                      <p class="mb-0">{{ parsedBlock.session_progress }}</p>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>{{ $t('details.block.current_era_index') }}</td>
-                    <td class="text-right">
-                      <p class="mb-0">{{ parsedBlock.current_era - 1 }}</p>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>{{ $t('details.block.era_length') }}</td>
-                    <td class="text-right">
-                      <p class="mb-0">{{ parsedBlock.era_length }}</p>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>{{ $t('details.block.total_issuance') }}</td>
-                    <td class="text-right">
-                      <p class="mb-0">
-                        {{ formatAmount(parsedBlock.total_issuance) }}
-                      </p>
-                    </td>
-                  </tr>
                 </tbody>
               </table>
               <b-tabs class="mt-4" content-class="mt-4" fill>
@@ -281,7 +225,7 @@
                     </table>
                   </template>
                 </b-tab>
-                <b-tab>
+                <!-- <b-tab>
                   <template #title>
                     <h5>{{ $t('details.block.logs') }}</h5>
                   </template>
@@ -305,7 +249,7 @@
                       </table>
                     </div>
                   </template>
-                </b-tab>
+                </b-tab> -->
               </b-tabs>
             </div>
           </div>
@@ -334,7 +278,6 @@ export default {
       parsedBlock: undefined,
       parsedExtrinsics: [],
       parsedEvents: [],
-      parsedLogs: [],
     }
   },
   head() {
@@ -379,24 +322,12 @@ export default {
             block_author_name
             block_hash
             block_number
-            current_era
-            current_index
-            era_length
             extrinsics_root
-            is_epoch
-            new_accounts
-            num_transfers
             parent_hash
-            session_length
-            session_per_era
-            session_progress
-            spec_name
-            spec_version
             state_root
             timestamp
             total_events
-            validator_count
-            total_issuance
+            total_extrinsics
           }
         }
       `,
@@ -458,27 +389,6 @@ export default {
       },
       result({ data }) {
         this.parsedExtrinsics = data.extrinsic
-      },
-    },
-    log: {
-      query: gql`
-        query log($block_number: bigint!) {
-          log(where: { block_number: { _eq: $block_number } }) {
-            block_number
-            log_index
-            type
-            engine
-            data
-          }
-        }
-      `,
-      variables() {
-        return {
-          block_number: this.$route.query.blockNumber,
-        }
-      },
-      result({ data }) {
-        this.parsedLogs = data.log
       },
     },
   },
