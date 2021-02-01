@@ -21,9 +21,8 @@
             >
               <Identicon
                 :key="data.item.from"
-                :value="data.item.from"
+                :address="data.item.from"
                 :size="20"
-                :theme="'polkadot'"
               />
               <span v-if="getDisplayName(data.item.from)">
                 {{ getDisplayName(data.item.from) }}
@@ -42,9 +41,8 @@
             >
               <Identicon
                 :key="data.item.to"
-                :value="data.item.to"
+                :address="data.item.to"
                 :size="20"
-                :theme="'polkadot'"
               />
               <span v-if="getDisplayName(data.item.to)">
                 {{ getDisplayName(data.item.to) }}

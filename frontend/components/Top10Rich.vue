@@ -6,9 +6,8 @@
           <p class="mb-0 d-inline-block">
             <Identicon
               :key="data.item.account_id"
-              :value="data.item.account_id"
+              :address="data.item.account_id"
               :size="20"
-              :theme="'polkadot'"
             />
             <nuxt-link
               v-b-tooltip.hover

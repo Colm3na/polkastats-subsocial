@@ -34,7 +34,7 @@ $info: $cyan !default;
 $warning: $yellow !default;
 $danger: $red !default;
 $light: $gray-500 !default;
-$dark: #fff;
+$dark: $gray-900;
 
 // set theme colors (variant names)
 $theme-colors: () !default;
@@ -70,16 +70,16 @@ $pagination-active-border-color: $secondary !default;
 $pagination-disabled-color: $secondary !default;
 $pagination-disabled-bg: $white !default;
 $pagination-disabled-border-color: $secondary !default;
-$table-dark-bg: $body-bg !default;
-$table-dark-color: $body-color !default;
-$table-dark-border-color: rgba(255, 255, 255, 0.2) !default;
+// $table-dark-bg: $body-bg !default;
+// $table-dark-color: $body-color !default;
+// $table-dark-border-color: rgba(255, 255, 255, 0.2) !default;
 $nav-tabs-link-active-color: $body-color !default;
 $hr-border-color: rgba(255, 255, 255, 0.2) !default;
 $custom-control-indicator-checked-bg: $primary2 !default;
 $custom-control-indicator-focus-border-color: $gray-600 !default;
-$navbar-dark-color: $light !default;
-$navbar-dark-hover-color: $white !default;
-$navbar-dark-disabled-color: $white !default;
+// $navbar-dark-color: $light !default;
+// $navbar-dark-hover-color: $white !default;
+// $navbar-dark-disabled-color: $white !default;
 $h1-font-size: 2.1rem !default;
 
 // import bootstrap scss
@@ -111,7 +111,7 @@ body::-webkit-scrollbar-thumb {
   outline: none;
 }
 .logo {
-  height: 35px;
+  height: 24px;
 }
 .navbar-dark {
   border-bottom: 1px solid#fdf5f5cc;
@@ -275,4 +275,11 @@ pre {
 }
 .csv-export {
   cursor: pointer;
+}
+
+
+// subsocial
+
+.header-container {
+  background-color: $dark;
 }

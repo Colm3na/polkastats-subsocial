@@ -22,9 +22,8 @@
           <p class="mb-0 d-inline-block">
             <Identicon
               :key="data.item.block_author"
-              :value="data.item.block_author"
+              :address="data.item.block_author"
               :size="20"
-              :theme="'polkadot'"
             />
             <nuxt-link
               v-b-tooltip.hover

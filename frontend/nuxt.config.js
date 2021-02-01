@@ -55,10 +55,16 @@ export default {
 
   // Module configurations
   axios: {},
+
   i18n: {
-    messages: {
-      en: require('./locales/en.json'),
-      es: require('./locales/es.json'),
+    locales: ['en', 'es'],
+    defaultLocale: 'en',
+    vueI18n: {
+      fallbackLocale: 'en',
+      messages: {
+        en: require('./locales/en.json'),
+        es: require('./locales/es.json'),
+      },
     },
   },
   apollo: {
