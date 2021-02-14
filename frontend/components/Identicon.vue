@@ -1,8 +1,8 @@
 <template>
   <div
     v-b-tooltip.hover
-    title="Click to copy validator address to clipboard"
-    class="d-inline"
+    title="Click to copy address to clipboard"
+    class="d-inline-block"
     @click="showToast"
   >
     <Identicon
@@ -37,12 +37,12 @@ export default {
   },
   methods: {
     showToast() {
-      // this.$bvToast.toast(this.address, {
-      //   title: 'Address copied to clipboard!',
-      //   variant: 'secondary',
-      //   autoHideDelay: 5000,
-      //   appendToast: false,
-      // })
+      this.$bvToast.toast(this.address, {
+        title: 'Address copied to clipboard!',
+        variant: 'success',
+        autoHideDelay: 5000,
+        appendToast: false,
+      })
     },
   },
 }

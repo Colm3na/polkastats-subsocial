@@ -1,8 +1,6 @@
 <template>
-  <div v-if="lastBlock">
+  <div v-if="lastBlock" class="chain-info mb-4">
     <div class="row">
-      <div class="col-6 col-md-6 col-lg-3 mb-4"></div>
-      <div class="col-6 col-md-6 col-lg-3 mb-4"></div>
       <div class="col-6 col-md-6 col-lg-3 mb-4">
         <div class="card h-100">
           <div class="card-body">
@@ -37,6 +35,36 @@
           </div>
         </div>
       </div>
+      <div class="col-6 col-md-6 col-lg-3 mb-4">
+        <div class="card h-100">
+          <div class="card-body">
+            <h4 class="mb-3">Total Extrinsics</h4>
+            <nuxt-link
+              v-b-tooltip.hover
+              to="/extrinsics"
+              title="Click to see extrinsics!"
+            >
+              <h6 class="d-inline-block">
+                {{ formatNumber(totalExtrinsics) }}
+              </h6>
+            </nuxt-link>
+          </div>
+        </div>
+      </div>
+      <div class="col-6 col-md-6 col-lg-3 mb-4">
+        <div class="card h-100">
+          <div class="card-body">
+            <h4 class="mb-3">Total Events</h4>
+            <nuxt-link
+              v-b-tooltip.hover
+              to="/events"
+              title="Click to see events!"
+            >
+              <h6 class="d-inline-block">{{ formatNumber(totalEvents) }}</h6>
+            </nuxt-link>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -44,7 +72,7 @@
 <script>
 import gql from 'graphql-tag'
 import commonMixin from '../mixins/commonMixin.js'
-import { network } from '../polkastats.config.js'
+import { network } from '../frontend.config.js'
 
 export default {
   mixins: [commonMixin],
@@ -53,6 +81,8 @@ export default {
       network,
       lastBlock: 0,
       lastFinalizedBlock: 0,
+      totalExtrinsics: 0,
+      totalEvents: 0,
     }
   },
   apollo: {
@@ -86,22 +116,31 @@ export default {
           this.lastFinalizedBlock = data.block[0].block_number
         },
       },
+      total: {
+        query: gql`
+          subscription total {
+            total {
+              name
+              count
+            }
+          }
+        `,
+        result({ data }) {
+          this.totalExtrinsics =
+            data.total.find((row) => row.name === 'extrinsics').count || 0
+          this.totalTransfers =
+            data.total.find((row) => row.name === 'transfers').count || 0
+          this.totalEvents =
+            data.total.find((row) => row.name === 'events').count || 0
+        },
+      },
     },
   },
 }
 </script>
 
-<style scoped>
-.network .card h5 {
-  color: #670d35;
-}
-.network .card .card-body {
-  padding: 1rem 0.5rem;
-}
-.network .identicon {
-  display: inline-block;
-  margin: 0 0.2rem 0 0;
-  cursor: copy;
-  height: 25px;
+<style>
+.chain-info .card {
+  box-shadow: 0 8px 20px 0 #d4c3d159;
 }
 </style>

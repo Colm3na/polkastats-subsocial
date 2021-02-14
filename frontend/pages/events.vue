@@ -3,9 +3,9 @@
     <section>
       <b-container class="main py-5">
         <h1 class="mb-4">
-          {{ $t('pages.blocks.title') }}
+          {{ $t('pages.events.title') }}
         </h1>
-        <div class="last-blocks">
+        <div class="last-events">
           <div v-if="loading" class="text-center py-4">
             <Loading />
           </div>
@@ -17,34 +17,27 @@
                   id="filterInput"
                   v-model="filter"
                   type="search"
-                  :placeholder="$t('pages.blocks.search_placeholder')"
+                  :placeholder="$t('pages.events.search_placeholder')"
                 />
               </b-col>
             </b-row>
             <div class="table-responsive">
-              <b-table striped hover :fields="fields" :items="blocks">
+              <b-table striped hover :fields="fields" :items="events">
                 <template #cell(block_number)="data">
                   <p class="mb-0">
                     <nuxt-link
                       v-b-tooltip.hover
-                      :to="`/block/${data.item.block_hash}`"
+                      :to="`/block?blockNumber=${data.item.block_number}`"
                       title="Check block information"
                     >
                       #{{ formatNumber(data.item.block_number) }}
                     </nuxt-link>
                   </p>
                 </template>
-                <template #cell(finalized)="data">
-                  <p v-if="data.item.finalized" class="mb-0">
-                    <font-awesome-icon icon="check" class="text-success" />
-                  </p>
-                  <p v-else class="mb-0">
-                    <font-awesome-icon icon="clock" class="text-light" />
-                  </p>
-                </template>
-                <template #cell(block_hash)="data">
+                <template #cell(section)="data">
                   <p class="mb-0">
-                    {{ shortHash(data.item.block_hash) }}
+                    {{ data.item.section }} ➡
+                    {{ data.item.method }}
                   </p>
                 </template>
               </b-table>
@@ -116,7 +109,7 @@ export default {
     return {
       loading: true,
       filter: '',
-      blocks: [],
+      events: [],
       paginationOptions,
       perPage: localStorage.paginationOptions
         ? parseInt(localStorage.paginationOptions)
@@ -130,23 +123,18 @@ export default {
           sortable: true,
         },
         {
-          key: 'finalized',
-          label: 'Finalized',
+          key: 'event_index',
+          label: 'Index',
           sortable: true,
         },
         {
-          key: 'block_hash',
-          label: 'Hash',
+          key: 'section',
+          label: 'Event',
           sortable: true,
         },
         {
-          key: 'total_extrinsics',
-          label: 'Extrinsics',
-          sortable: true,
-        },
-        {
-          key: 'total_events',
-          label: 'Events',
+          key: 'data',
+          label: 'Data',
           sortable: true,
         },
       ],
@@ -160,24 +148,25 @@ export default {
   },
   apollo: {
     $subscribe: {
-      block: {
+      event: {
         query: gql`
-          subscription blocks(
+          subscription events(
             $blockNumber: bigint
             $perPage: Int!
             $offset: Int!
           ) {
-            block(
+            event(
               limit: $perPage
               offset: $offset
               where: { block_number: { _eq: $blockNumber } }
-              order_by: { block_number: desc }
+              order_by: { block_number: desc, event_index: desc }
             ) {
               block_number
-              finalized
-              block_hash
-              total_extrinsics
-              total_events
+              event_index
+              data
+              method
+              phase
+              section
             }
           }
         `,
@@ -189,17 +178,17 @@ export default {
           }
         },
         result({ data }) {
-          this.blocks = data.block
+          this.events = data.event
           if (this.filter) {
-            this.totalRows = this.blocks.length
+            this.totalRows = this.events.length
           }
           this.loading = false
         },
       },
-      totalBlocks: {
+      totalEvents: {
         query: gql`
           subscription total {
-            total(where: { name: { _eq: "blocks" } }, limit: 1) {
+            total(where: { name: { _eq: "events" } }, limit: 1) {
               count
             }
           }

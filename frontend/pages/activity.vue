@@ -3,9 +3,9 @@
     <section>
       <b-container class="main py-5">
         <h1 class="mb-4">
-          {{ $t('pages.blocks.title') }}
+          {{ $t('pages.activity.title') }}
         </h1>
-        <div class="last-blocks">
+        <div class="last-extrinsics">
           <div v-if="loading" class="text-center py-4">
             <Loading />
           </div>
@@ -22,29 +22,41 @@
               </b-col>
             </b-row>
             <div class="table-responsive">
-              <b-table striped hover :fields="fields" :items="blocks">
+              <b-table striped hover :fields="fields" :items="extrinsics">
                 <template #cell(block_number)="data">
                   <p class="mb-0">
                     <nuxt-link
                       v-b-tooltip.hover
-                      :to="`/block/${data.item.block_hash}`"
-                      title="Check block information"
+                      :to="`/extrinsic/${data.item.block_number}/${data.item.extrinsic_index}`"
+                      title="Check extrinsic information"
                     >
-                      #{{ formatNumber(data.item.block_number) }}
+                      {{ data.item.block_number }}-{{
+                        data.item.extrinsic_index
+                      }}
                     </nuxt-link>
                   </p>
                 </template>
-                <template #cell(finalized)="data">
-                  <p v-if="data.item.finalized" class="mb-0">
-                    <font-awesome-icon icon="check" class="text-success" />
-                  </p>
-                  <p v-else class="mb-0">
-                    <font-awesome-icon icon="clock" class="text-light" />
+                <template #cell(hash)="data">
+                  <p class="mb-0">{{ shortHash(data.item.hash) }}</p>
+                </template>
+                <template #cell(section)="data">
+                  <p class="mb-0">
+                    {{ data.item.section }} ➡
+                    {{ data.item.method }}
                   </p>
                 </template>
-                <template #cell(block_hash)="data">
+                <template #cell(success)="data">
                   <p class="mb-0">
-                    {{ shortHash(data.item.block_hash) }}
+                    <font-awesome-icon
+                      v-if="data.item.success"
+                      icon="check-circle"
+                      class="text-success"
+                    />
+                    <font-awesome-icon
+                      v-else
+                      icon="check-circle"
+                      class="text-danger"
+                    />
                   </p>
                 </template>
               </b-table>
@@ -116,7 +128,7 @@ export default {
     return {
       loading: true,
       filter: '',
-      blocks: [],
+      extrinsics: [],
       paginationOptions,
       perPage: localStorage.paginationOptions
         ? parseInt(localStorage.paginationOptions)
@@ -126,27 +138,22 @@ export default {
       fields: [
         {
           key: 'block_number',
-          label: 'Block',
+          label: 'Extrinsic',
           sortable: true,
         },
         {
-          key: 'finalized',
-          label: 'Finalized',
-          sortable: true,
-        },
-        {
-          key: 'block_hash',
+          key: 'hash',
           label: 'Hash',
           sortable: true,
         },
         {
-          key: 'total_extrinsics',
-          label: 'Extrinsics',
+          key: 'section',
+          label: 'Extrinsic',
           sortable: true,
         },
         {
-          key: 'total_events',
-          label: 'Events',
+          key: 'success',
+          label: 'Success',
           sortable: true,
         },
       ],
@@ -160,24 +167,30 @@ export default {
   },
   apollo: {
     $subscribe: {
-      block: {
+      extrinsic: {
         query: gql`
-          subscription blocks(
+          subscription extrinsics(
             $blockNumber: bigint
             $perPage: Int!
             $offset: Int!
           ) {
-            block(
+            extrinsic(
               limit: $perPage
               offset: $offset
-              where: { block_number: { _eq: $blockNumber } }
-              order_by: { block_number: desc }
+              where: {
+                block_number: { _eq: $blockNumber }
+                is_signed: { _eq: true }
+              }
+              order_by: { block_number: desc, extrinsic_index: desc }
             ) {
               block_number
-              finalized
-              block_hash
-              total_extrinsics
-              total_events
+              extrinsic_index
+              is_signed
+              signer
+              section
+              method
+              hash
+              success
             }
           }
         `,
@@ -189,17 +202,17 @@ export default {
           }
         },
         result({ data }) {
-          this.blocks = data.block
+          this.extrinsics = data.extrinsic
           if (this.filter) {
-            this.totalRows = this.blocks.length
+            this.totalRows = this.extrinsics.length
           }
           this.loading = false
         },
       },
-      totalBlocks: {
+      totalExtrinsics: {
         query: gql`
           subscription total {
-            total(where: { name: { _eq: "blocks" } }, limit: 1) {
+            total(where: { name: { _eq: "extrinsics" } }, limit: 1) {
               count
             }
           }
@@ -214,3 +227,11 @@ export default {
   },
 }
 </script>
+
+<style>
+.last-blocks .identicon {
+  display: inline-block;
+  margin: 0 0.2rem 0 0;
+  cursor: copy;
+}
+</style>

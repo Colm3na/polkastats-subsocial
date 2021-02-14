@@ -3,9 +3,9 @@
     <section>
       <b-container class="main py-5">
         <h1 class="mb-4">
-          {{ $t('pages.blocks.title') }}
+          {{ $t('pages.transfers.title') }}
         </h1>
-        <div class="last-blocks">
+        <div class="last-transfers">
           <div v-if="loading" class="text-center py-4">
             <Loading />
           </div>
@@ -17,34 +17,86 @@
                   id="filterInput"
                   v-model="filter"
                   type="search"
-                  :placeholder="$t('pages.blocks.search_placeholder')"
+                  :placeholder="$t('components.transfers.search')"
                 />
               </b-col>
             </b-row>
             <div class="table-responsive">
-              <b-table striped hover :fields="fields" :items="blocks">
+              <b-table
+                striped
+                hover
+                :fields="fields"
+                :per-page="perPage"
+                :current-page="currentPage"
+                :items="transfers"
+                :filter="filter"
+                @filtered="onFiltered"
+              >
                 <template #cell(block_number)="data">
                   <p class="mb-0">
                     <nuxt-link
                       v-b-tooltip.hover
-                      :to="`/block/${data.item.block_hash}`"
+                      :to="`/block?blockNumber=${data.item.block_number}`"
                       title="Check block information"
                     >
                       #{{ formatNumber(data.item.block_number) }}
                     </nuxt-link>
                   </p>
                 </template>
-                <template #cell(finalized)="data">
-                  <p v-if="data.item.finalized" class="mb-0">
-                    <font-awesome-icon icon="check" class="text-success" />
-                  </p>
-                  <p v-else class="mb-0">
-                    <font-awesome-icon icon="clock" class="text-light" />
+                <template #cell(hash)="data">
+                  <p class="mb-0">
+                    {{ shortHash(data.item.hash) }}
                   </p>
                 </template>
-                <template #cell(block_hash)="data">
+                <template #cell(from)="data">
                   <p class="mb-0">
-                    {{ shortHash(data.item.block_hash) }}
+                    <Identicon
+                      :key="data.item.from"
+                      :address="data.item.from"
+                      :size="20"
+                    />
+                    <nuxt-link
+                      v-b-tooltip.hover
+                      :to="`/account/${data.item.from}`"
+                      :title="$t('pages.accounts.account_details')"
+                    >
+                      {{ shortAddress(data.item.from) }}
+                    </nuxt-link>
+                  </p>
+                </template>
+                <template #cell(to)="data">
+                  <p class="mb-0">
+                    <Identicon
+                      :key="data.item.to"
+                      :address="data.item.to"
+                      :size="20"
+                    />
+                    <nuxt-link
+                      v-b-tooltip.hover
+                      :to="`/account/${data.item.to}`"
+                      :title="$t('pages.accounts.account_details')"
+                    >
+                      {{ shortAddress(data.item.to) }}
+                    </nuxt-link>
+                  </p>
+                </template>
+                <template #cell(amount)="data">
+                  <p class="mb-0">
+                    {{ formatAmount(data.item.amount) }}
+                  </p>
+                </template>
+                <template #cell(success)="data">
+                  <p class="mb-0">
+                    <font-awesome-icon
+                      v-if="data.item.success"
+                      icon="check-circle"
+                      class="text-success"
+                    />
+                    <font-awesome-icon
+                      v-else
+                      icon="check-circle"
+                      class="text-danger"
+                    />
                   </p>
                 </template>
               </b-table>
@@ -105,18 +157,21 @@
 import gql from 'graphql-tag'
 import commonMixin from '@/mixins/commonMixin.js'
 import Loading from '@/components/Loading.vue'
+import Identicon from '@/components/Identicon.vue'
 import { paginationOptions } from '@/frontend.config.js'
 
 export default {
   components: {
+    Identicon,
     Loading,
   },
   mixins: [commonMixin],
   data() {
     return {
       loading: true,
-      filter: '',
-      blocks: [],
+      filter: null,
+      filterOn: [],
+      transfers: [],
       paginationOptions,
       perPage: localStorage.paginationOptions
         ? parseInt(localStorage.paginationOptions)
@@ -130,23 +185,28 @@ export default {
           sortable: true,
         },
         {
-          key: 'finalized',
-          label: 'Finalized',
-          sortable: true,
-        },
-        {
-          key: 'block_hash',
+          key: 'hash',
           label: 'Hash',
           sortable: true,
         },
         {
-          key: 'total_extrinsics',
-          label: 'Extrinsics',
+          key: 'from',
+          label: 'From',
           sortable: true,
         },
         {
-          key: 'total_events',
-          label: 'Events',
+          key: 'to',
+          label: 'To',
+          sortable: true,
+        },
+        {
+          key: 'amount',
+          label: 'Amount',
+          sortable: true,
+        },
+        {
+          key: 'success',
+          label: 'Success',
           sortable: true,
         },
       ],
@@ -157,57 +217,53 @@ export default {
       localStorage.paginationOptions = num
       this.perPage = parseInt(num)
     },
+    onFiltered(filteredItems) {
+      // Trigger pagination to update the number of buttons/pages due to filtering
+      this.totalRows = filteredItems.length
+      this.currentPage = 1
+    },
   },
   apollo: {
     $subscribe: {
-      block: {
+      extrinsic: {
         query: gql`
-          subscription blocks(
-            $blockNumber: bigint
-            $perPage: Int!
-            $offset: Int!
-          ) {
-            block(
+          subscription extrinsic($perPage: Int!, $offset: Int!) {
+            extrinsic(
               limit: $perPage
               offset: $offset
-              where: { block_number: { _eq: $blockNumber } }
-              order_by: { block_number: desc }
+              where: {
+                section: { _eq: "balances" }
+                method: { _like: "transfer%" }
+              }
+              order_by: { block_number: desc, extrinsic_index: desc }
             ) {
               block_number
-              finalized
-              block_hash
-              total_extrinsics
-              total_events
+              signer
+              hash
+              args
+              success
             }
           }
         `,
         variables() {
           return {
-            blockNumber: this.filter ? parseInt(this.filter) : undefined,
             perPage: this.perPage,
             offset: (this.currentPage - 1) * this.perPage,
           }
         },
         result({ data }) {
-          this.blocks = data.block
-          if (this.filter) {
-            this.totalRows = this.blocks.length
-          }
-          this.loading = false
-        },
-      },
-      totalBlocks: {
-        query: gql`
-          subscription total {
-            total(where: { name: { _eq: "blocks" } }, limit: 1) {
-              count
+          this.transfers = data.extrinsic.map((transfer) => {
+            return {
+              block_number: transfer.block_number,
+              hash: transfer.hash,
+              from: transfer.signer,
+              to: JSON.parse(transfer.args)[0],
+              amount: JSON.parse(transfer.args)[1],
+              success: transfer.success,
             }
-          }
-        `,
-        result({ data }) {
-          if (!this.filter) {
-            this.totalRows = data.total[0].count
-          }
+          })
+          this.totalRows = this.transfers.length
+          this.loading = false
         },
       },
     },

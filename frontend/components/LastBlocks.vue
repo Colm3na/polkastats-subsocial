@@ -56,6 +56,16 @@ export default {
           label: 'Hash',
           sortable: true,
         },
+        {
+          key: 'total_extrinsics',
+          label: 'Extrinsics',
+          sortable: true,
+        },
+        {
+          key: 'total_events',
+          label: 'Events',
+          sortable: true,
+        },
       ],
     }
   },
@@ -68,6 +78,8 @@ export default {
               block_number
               finalized
               block_hash
+              total_extrinsics
+              total_events
             }
           }
         `,

@@ -32,22 +32,11 @@
       "progress": "Progress"
     },
     "transfers": {
-      "search": "Search transfer by block number, hash or source/destination address or identity name",
+      "search": "Search transfer by block number, hash, source address or destination address",
       "no_transfer_found": "No transfer found"
     },
-    "rewards": {
-      "search": "Search reward by block number, event index or amount",
-      "no_reward_found": "No reward found"
-    },
-    "slashes": {
-      "search": "Search slash by block number, event index or amount",
-      "no_slash_found": "No slash found"
-    },
-    "redenomination": {
-      "title": "DOT REDENOMINATION",
-      "message": "On approximately August 21st at 16:40 UTC (block number 1,248,328), the DOT token will undergo a redenomination from its original sale. New DOTs will be 100x smaller than DOTs (old). Therefore, your DOT balance will be 100x higher and the price per DOT will be 100x lower.",
-      "post_redenomination": "On approximately August 21st at 16:40 UTC (block number 1,248,328), the DOT token underwent a redenomination from its original sale. New DOT are 100x smaller than DOT (old). Therefore, your DOT balance is 100x higher and the price per DOT is 100x lower. The percentage of the DOT you own relative to total supply is unchanged. This does not affect the total value of your position.",
-      "more_info": "See the Polkadot blog post for more information: "
+    "loading": {
+      "loading_data": "Loading data, please be patient..."
     }
   },
   "layout": {
@@ -92,6 +81,7 @@
       "active_accounts": "Active accounts",
       "search_placeholder": "Search account by address or identity",
       "sort": "Sort",
+      "account_details": "Account details",
       "rank": "Rank",
       "free_balance": "Free Balance",
       "available_balance": "Available Balance",
@@ -168,308 +158,30 @@
       "era_points": "Era points",
       "loading_data": "Loading data"
     },
-    "intentions": {
-      "title": "Intentions",
-      "search_placeholder": "Search intention by account or identity display name",
-      "sort": "Sort",
-      "intention_details": "Intention details",
-      "active_bonded": "Active bonded",
-      "total_bonded": "Total bonded",
-      "remove_from_favorites": "Remove from Favorites",
-      "add_to_favorites": "Add to Favorites",
-      "total_stake": "Total Stake",
-      "commission": "Commission",
-      "stakers": "Stakers",
-      "head_title": "PolkaStats -  {networkName} intention validators",
-      "head_content": "{networkName} intention validators"
-    },
-    "nominators": {
-      "title": "Nominators",
-      "search_placeholder": "Search nominator by account or identity display name",
-      "sort": "Sort",
-      "nominator_details": "Nominator details",
-      "controller_details": "Controller details",
-      "remove_from_favorites": "Remove from Favorites",
-      "add_to_favorites": "Add to Favorites",
-      "rank": "Rank",
-      "nominator": "Nominator",
-      "controller": "Controller",
-      "nominations": "Nominations",
-      "total_stake": "Total Stake",
-      "head_title": "PolkaStats - {networkName} nominators",
-      "head_content": "{networkName} nominators"
-    },
-    "nominator": {
-      "head_title": "PolkaStats - {networkName} nominator {address}",
-      "head_content": "{networkName} nominator {address}"
-    },
-    "targets": {
-      "title": "Targets",
-      "search_placeholder": "Search validator by identity",
-      "loading_data": "Loading data, it can take a long time. Be patient, please",
-      "remove_from_favorites": "Remove from Favorites",
-      "add_to_favorites": "Add to Favorites",
-      "validator": "Validator",
-      "commission": "Commission",
-      "total_stake": "Total stake",
-      "own_stake": "Own stake",
-      "other_stake": "Other stake",
-      "estimated_payout": "Estimated payout/era 100 {networkDenom}",
-      "estimated_annualized_payout_percentage": "Estimated annualized rewards",
-      "accordion-info": {
-        "delegator_rewards": "Nominators rewards. How does it work",
-        "info_1": "The validators along with their nominators form different groups.",
-        "info_2": "Validators accumulate (era) points for their activity. They have to sign validity statments and produce blocks to gain points.",
-        "info_3": "At the end of an era the total reward is divided among the groups based on their accumulated points.",
-        "info_4": "Once each group gets its reward, the commission of the validator is subtracted from the group earnings.",
-        "info_5": "The rest of the group earnings is distributed among the nominators based in their percentage of stake of in the group.",
-        "risks": "Risks",
-        "risks_text": "According to the game rules, you may think that the most profitable validator is the one occuping the group with less total stake. This is partially true, but you better consider the folowing risks. Last group of the list (number 197 currently) has great chances of being out of the list in the next epoch. When a validator gets out of the list that validator and its nominators stop receiving rewards and its group is occupied by a new validator and its nominators. Slashing is a different kind of risk you may consider. When a validator misbehaves it suffers an slashing event. Slashing is the punishment for failing to follow the protocol. The punishment is applied to the validator and all delegators of its slot. Downtimes and equivocations (bad signing) are the most common reasons that trigger a slashing event. The only way to protect yourself from slashing events is to carefully chose the validators you are nominating. Studing its history, setup and reputation may help you when selecting the validators where you are depositing your trust (your stake)."
-      },
-      "sort": "Sort"
-    },
-    "election-prediction": {
-      "title": "Election prediction",
-      "last_execution": "Last execution at block",
-      "predicted_candidates_by_TEXT": "Predicted candidates by phragmen election algorithm",
-      "offline_phragmen_is_TEXT": "offline-phragmen is currently broken so this is temporary disabled!",
-      "search_placeholder": "Search candidate by account or identity display name",
-      "sort": "Sort",
-      "candidate_details": "Candidate details",
-      "self_bonded": "Self bonded",
-      "bonded_by_nominators": "Bonded by nominators",
-      "total_stake": "Total Stake",
-      "remove_from_favorites": "Remove from Favorites",
-      "add_to_favorites": "Add to Favorites",
-      "candidate": "Candidate",
-      "voters": "Voters",
-      "self_stake": "Self stake",
-      "voters_stake": "Voters stake",
-      "head_title": "PolkaStats - {networkName} phragmen candidates",
-      "head_content": "{networkName} phragmen candidates"
-    },
-    "economics": {
-      "title": "{networkName} economics",
-      "head_title": "PolkaStats - {networkName} economics",
-      "head_content": "{networkName} economics",
-      "total_issuance": "Total issuance",
-      "fiat": "{networkDenom} / USD",
-      "lowest_validator_stake": "Lowest val stake"
-    },
-    "support-us": {
-      "support_polkastats": "SUPPORT POLKASTATS",
-      "polkastats_software_TEXT": "PolkaStats software is open source and the services hosted at https://polkastats.io are provided for free (as in free beer).",
-      "i_enjoy_developing_TEXT": "I enjoy developing PolkaStats and providing the services without annoying ads and I plan to continue doing it in that way :-).",
-      "if_you_like_TEXT": "If you like my work and want to support the hosting payments or the time I spend developing and maintaining the server, you can do it in several ways.",
-      "feedback": "FeedBack!",
-      "we_love_feedback_TEXT": "We love getting feedback from the community, if you find a bug, want to comment some behaviour or want a feature being added please place an Issue in our",
-      "github_repository": "GitHub repository",
-      "stake_in_our_validator": "Stake in our validators",
-      "this_is_an_TEXT": "This is the easiest way you can support PolkaStats, please check it out our staking guides for Polkadot and Kusama.",
-      "follow_polkastats_on_twitter": "Follow @PolkaStats on Twitter",
-      "are_you_a_TEXT": "Are you a happy PolkaStats user? Make sure you follow",
-      "on_twitter_to_get_TEXT": "on Twitter to get the last platform updates",
-      "head_title": "PolkaStats - Support us",
-      "head_content": "Support us"
-    },
-    "validators": {
-      "title": "Validators",
-      "search_placeholder": "Search validator by account or identity display name",
-      "filter": "Filter",
-      "where": "where",
-      "than": "than",
-      "elected_for_next_session": "Elected for next session",
-      "not_elected_for_next_session": "Not elected for next session",
-      "remove_from_favorites": "Remove from Favorites",
-      "add_to_favorites": "Add to Favorites",
-      "validator_details": "Validator details",
-      "total_bonded": "Total bonded",
-      "percentage_over_total_bonded_stake": "Percentage over total bonded stake",
-      "validator": "Validator",
-      "stakers": "Stakers",
-      "total_stake": "Total stake",
-      "stake": "Stake",
-      "commission": "Commission",
-      "era_points": "Era points",
-      "produced_blocks": "Produced blocks",
-      "head_title": "PolkaStats - {networkName} network statistics",
-      "head_content": "{networkName} network statistics"
-    },
-    "validator": {
-      "head_title": "PolkaStats - {networkName} validator {address}",
-      "head_content": "{networkName} validator {address}"
-    },
-    "polkastats_validator": {
-      "title": "PolkaStats validator",
-      "head_title": "PolkaStats - {networkName} PolkaStats validator",
-      "head_content": "{networkName} PolkaStats validator"
-    },
     "dashboard": {
       "title": "Dashboard",
-      "head_title": "PolkaStats - {networkName} network statistics",
-      "head_content": "{networkName} dashboard",
       "recent_blocks": "Last blocks",
       "top_rich": "Top 10 rich accounts",
       "recent_extrinsics": "Last extrinsics",
       "recent_events": "Last events",
-      "recent_transfers": "Last transfers",
-      "polkastats_validator": "PolkaStats Validator",
-      "polkastats_validator_subtitle": "Support our work staking in our {networkName} validator!",
-      "ongoing_election_title": "Ongoing validator election process",
-      "ongoing_election_1": "{numBlocks} remaining blocks ({minutes} min)",
-      "ongoing_election_2": "No staking action are allowed until it finished"
+      "recent_transfers": "Last transfers"
     },
     "blocks": {
       "title": "Blocks",
-      "head_title": "PolkaStats - {networkName} blocks",
-      "head_content": "{networkName} blocks",
       "search_placeholder": "Search by block number"
     },
-    "block": {
-      "head_title": "PolkaStats - {networkName} block {blockNumber}",
-      "head_content": "{networkName} block {blockNumber}"
-    },
     "extrinsics": {
-      "title": "Extrinsics",
-      "head_title": "PolkaStats - {networkName} extrinsics",
-      "head_content": "{networkName} extrinsics"
-    },
-    "extrinsic": {
-      "head_title": "PolkaStats - {networkName} extrinsic {extrinsicHash}",
-      "head_content": "{networkName} extrinsic {extrinsicHash}"
+      "title": "Extrinsics"
     },
     "transfers": {
-      "title": "Transfers",
-      "head_title": "PolkaStats - {networkName} transfers",
-      "head_content": "{networkName} transfers"
+      "title": "Transfers"
     },
-    "transfer": {
-      "head_title": "PolkaStats - {networkName} transfer {extrinsicHash}",
-      "head_content": "{networkName} transfer {extrinsicHash}"
+    "activity": {
+      "title": "Activity"
     },
     "events": {
       "title": "Events",
-      "head_title": "PolkaStats - {networkName} events",
-      "head_content": "{networkName} events",
       "search_placeholder": "Search by block number"
-    },
-    "event": {
-      "head_title": "PolkaStats - {networkName} event {systemEvent}",
-      "head_content": "{networkName} event {systemEvent}"
-    },
-    "send": {
-      "title": "Send {networkDenom}s using Polkadot JS extension",
-      "head_title": "PolkaStats - Send {networkDenom}s using Polkadot JS extension",
-      "head_content": "Send {networkDenom}s using Polkadot JS extension",
-      "no_extension_found": "No Polkadot JS extension found, please install it",
-      "no_accounts_found": "No accounts found in extension",
-      "transferable_balance": "Transferable balance",
-      "install_extension": "Please install extension, import an account and allow access",
-      "amount_validation": "Please enter a positive amount, less or equal to",
-      "send": "Send",
-      "from": "From",
-      "to": "To",
-      "address": "Address",
-      "amount": "Amount",
-      "destination": "Please enter the destination address",
-      "tx_sent": "Transaction sent!",
-      "extrinsic_hash": "Extrinsic hash is",
-      "successful_tx": "Succesful transaction!",
-      "failed_tx": "Failed transaction!",
-      "included_in_block": "Extrinsic with hash {extrinsicHash} was included in block",
-      "guide_title": "How to send {networkDenom}s",
-      "guide_subtitle_1": "Now you can transfer {networkDenom}s using PolkaStats",
-      "guide_subtitle_2": "in a safe way.",
-      "guide_1_1": "First of all you need a",
-      "guide_1_2": "Polkadot account",
-      "guide_1_3": "with some",
-      "guide_1_4": "free balance",
-      "guide_2": "Install Polkadot JS extension from",
-      "guide_3": "Import your existings account/s or create a new one",
-      "guide_4": "Refresh this page and allow to access the extension",
-      "guide_5": "Fill the form and sign the transaction in the extension!"
-    },
-    "stake": {
-      "title": "Stake {networkDenom}s using Polkadot JS extension",
-      "head_title": "PolkaStats - Stake {networkDenom}s using Polkadot JS extension",
-      "head_content": "Stake {networkDenom}s using Polkadot JS extension",
-      "no_extension_found": "No Polkadot JS extension found, please install it",
-      "no_accounts_found": "No accounts found in extension",
-      "transferable_balance": "Transferable balance",
-      "install_extension": "Please install extension, import an account and allow access",
-      "amount_validation": "Please enter a positive amount, less or equal to",
-      "stake": "Stake",
-      "from": "From",
-      "amount": "Amount",
-      "destination": "Please enter the destination address",
-      "tx_sent": "Transaction sent!",
-      "extrinsic_hash": "Extrinsic hash is",
-      "successful_tx": "Succesful transaction!",
-      "failed_tx": "Failed transaction!",
-      "included_in_block": "Extrinsic with hash {extrinsicHash} was included in block",
-      "guide_title": "How to stake {networkDenom}s",
-      "guide_subtitle_1": "Now you can stake {networkDenom}s using PolkaStats",
-      "guide_subtitle_2": "in a safe way.",
-      "guide_1_1": "First of all you need a",
-      "guide_1_2": "Polkadot account",
-      "guide_1_3": "with some",
-      "guide_1_4": "free balance",
-      "guide_2": "Install Polkadot JS extension from",
-      "guide_3": "Import your existings account/s or create a new one",
-      "guide_4": "Refresh this page and allow to access the extension",
-      "guide_5": "Fill the form and sign the transaction in the extension!",
-      "experimental_title": "Warning, experimental!",
-      "experimental_content": "By now staking using this tool is only possible for addresses without any existent bond (i.e. accounts that didn't issue any staking action yet). The same address will be used as stash and controller.",
-      "search_validator": "Search validator...",
-      "select_validator": "Select your validator",
-      "validator_feedback": "Please select a validator",
-      "selected": "Selected",
-      "not_selected": "Not selected"
-    },
-    "how_to_stake": {
-      "title": "How to stake",
-      "head_title": "PolkaStats - How to stake",
-      "head_content": "How to stake",
-      "kusama": {
-        "title": "How to stake in Kusama",
-        "head_title": "PolkaStats - How to stake in Kusama",
-        "head_content": "How to stake in Kusama",
-        "lunie": {
-          "title": "How to stake in Kusama using Lunie",
-          "head_title": "PolkaStats - How to stake in Kusama using Lunie",
-          "head_content": "How to stake in Kusama using Lunie"
-        },
-        "polkadotjs": {
-          "title": "How to stake in Kusama using Polkadot JS",
-          "head_title": "PolkaStats - How to stake in Kusama using Polkadot JS",
-          "head_content": "How to stake in Kusama using Polkadot JS"
-        },
-        "polkastats": {
-          "title": "How to stake in Kusama using PolkaStats",
-          "head_title": "PolkaStats - How to stake in Kusama using PolkaStats",
-          "head_content": "How to stake in Kusama using PolkaStats"
-        }
-      },
-      "polkadot": {
-        "title": "How to stake in Polkadot",
-        "head_title": "PolkaStats - How to stake in Polkadot",
-        "head_content": "How to stake in Polkadot",
-        "lunie": {
-          "title": "How to stake in Polkadot using Lunie",
-          "head_title": "PolkaStats - How to stake in Polkadot using Lunie",
-          "head_content": "How to stake in Polkadot using Lunie"
-        },
-        "polkadotjs": {
-          "title": "How to stake in Polkadot using Polkadot JS",
-          "head_title": "PolkaStats - How to stake in Polkadot using Polkadot JS",
-          "head_content": "How to stake in Polkadot using Polkadot JS"
-        },
-        "polkastats": {
-          "title": "How to stake in Polkadot using PolkaStats",
-          "head_title": "PolkaStats - How to stake in Polkadot using PolkaStats",
-          "head_content": "How to stake in Polkadot using PolkaStats"
-        }
-      }
     }
   },
   "details": {
@@ -522,100 +234,8 @@
       "engine": "Engine",
       "total_issuance": "Total issuance"
     },
-    "intention": {
-      "previous_intention": "Previous intention: ",
-      "next_intention": "Next intention: ",
-      "intention": "Intention",
-      "in_favorites": "In Favorites",
-      "not_in_favorites": "Not in Favorites",
-      "active_bonded": "Active bonded",
-      "session_id": "Session id",
-      "next_session_id": "Next session id",
-      "commission": "Commission",
-      "reward_destination": "Reward destination",
-      "name": "Name",
-      "email": "Email",
-      "legal": "Legal",
-      "riot": "Riot",
-      "stakers": "Stakers",
-      "current_session_ids": "Current session ids",
-      "next_session_ids": "Next session ids",
-      "total_bonded": "Total bonded",
-      "monthly_chart": "Monthly",
-      "weekly_chart": "Weekly",
-      "daily_chart": "Daily"
-    },
-    "nominator": {
-      "previous_nominator": "Previous nominator: ",
-      "next_nominator": "Next nominator: ",
-      "nominator": "Nominator",
-      "total_bonded": "Total bonded",
-      "nomination": "nomination",
-      "nominations": "nominations",
-      "name": "Name",
-      "email": "Email",
-      "legal": "Legal",
-      "riot": "Riot",
-      "validator_details": "Validator details",
-      "commission": "Commission",
-      "account_details": "Account details",
-      "total_balance": "Total balance",
-      "daily_chart": "Daily",
-      "weekly_chart": "Weekly",
-      "monthly_chart": "Monthly"
-    },
-    "phragmen-candidate": {
-      "previous_candidate": "Previous candidate: ",
-      "next_candidate": "Next candidate: ",
-      "candidate": "Candidate",
-      "total_stake": "Total Stake",
-      "self_bonded": "Self bonded",
-      "bonded_by_nominators": "Bonded by nominators",
-      "name": "Name",
-      "email": "Email",
-      "legal": "Legal",
-      "riot": "Riot",
-      "voters": "Voters"
-    },
-    "validator": {
-      "previous_validator": "Previous validator: ",
-      "next_validator": "Next validator: ",
-      "validator": "Validador",
-      "elected_for_next_session": "Elected for next session",
-      "not_elected_for_next_session": "Not elected for next session",
-      "in_favorites": "In Favorites",
-      "not_in_favorites": "Not in Favorites",
-      "total_bonded": "Total bonded",
-      "self_bonded": "Self bonded",
-      "bonded_by_nominators": "Bonded by nominators",
-      "percentage_over_total_bonded_stake": "Percentage over total bonded stake",
-      "of_total_stake": "of total stake",
-      "era_points": "era points",
-      "session_id": "Session id",
-      "next_session_id": "Next session id",
-      "commission": "Commission",
-      "reward_destination": "Reward destination",
-      "name": "Name",
-      "email": "Email",
-      "legal": "Legal",
-      "riot": "Riot",
-      "nominators": "Nominators",
-      "search_placeholder": "Search staker by address",
-      "nominator_details": "Nominator details",
-      "monthly": "Monthly",
-      "weekly": "Weekly",
-      "daily": "Daily",
-      "rank": "Rank",
-      "staker": "Staker",
-      "percentage": "Percentage",
-      "amount": "Amount",
-      "reward": "Reward",
-      "slashes": "Slashes",
-      "produced_block": "Produced Block",
-      "status": "Status",
-      "date_time": "Date and Time",
-      "charts": "Charts",
-      "produced_blocks": "Produced blocks"
+    "extrinsic": {
+      "extrinsic_details": "Extrinsic details"
     }
   }
 }

@@ -126,7 +126,7 @@
                     <tr>
                       <td>{{ $t('details.account.account_nonce') }}</td>
                       <td class="text-right">
-                        {{ parsedAccount.balances.accountNonce }}
+                        {{ parsedAccount.nonce }}
                       </td>
                     </tr>
                     <tr>
@@ -184,7 +184,7 @@
                   </tbody>
                 </table>
               </div>
-              <!-- <b-tabs class="mt-4" content-class="mt-4" fill>
+              <b-tabs class="mt-4" content-class="mt-4" fill>
                 <b-tab active>
                   <template #title>
                     <h5>Sent transfers</h5>
@@ -197,19 +197,7 @@
                   </template>
                   <ReceivedTransfers :account-id="accountId" />
                 </b-tab>
-                <b-tab>
-                  <template #title>
-                    <h5>Rewards</h5>
-                  </template>
-                  <Rewards :account-id="accountId" />
-                </b-tab>
-                <b-tab>
-                  <template #title>
-                    <h5>Slashes</h5>
-                  </template>
-                  <Slashes :account-id="accountId" />
-                </b-tab>
-              </b-tabs> -->
+              </b-tabs>
             </div>
           </div>
         </template>
@@ -218,21 +206,20 @@
   </div>
 </template>
 <script>
-// import BN from 'bn.js'
 import gql from 'graphql-tag'
 import Identicon from '@/components/Identicon.vue'
 import Loading from '@/components/Loading.vue'
-// import SentTransfers from '@/components/SentTransfers.vue'
-// import ReceivedTransfers from '@/components/ReceivedTransfers.vue'
+import SentTransfers from '@/components/SentTransfers.vue'
+import ReceivedTransfers from '@/components/ReceivedTransfers.vue'
 import commonMixin from '@/mixins/commonMixin.js'
-import { network } from '@/polkastats.config.js'
+import { network } from '@/frontend.config.js'
 
 export default {
   components: {
     Identicon,
     Loading,
-    // SentTransfers,
-    // ReceivedTransfers,
+    SentTransfers,
+    ReceivedTransfers,
   },
   mixins: [commonMixin],
   data() {
@@ -267,24 +254,6 @@ export default {
       ],
     }
   },
-  head() {
-    return {
-      title: this.$t('pages.account.head_title', {
-        networkName: network.name,
-        address: this.accountId,
-      }),
-      meta: [
-        {
-          hid: 'description',
-          name: 'description',
-          content: this.$tc('pages.account.head_content', {
-            networkName: network.name,
-            address: this.accountId,
-          }),
-        },
-      ],
-    }
-  },
   watch: {
     $route() {
       this.accountId = this.$route.params.id
@@ -300,6 +269,7 @@ export default {
             available_balance
             free_balance
             locked_balance
+            nonce
             block_height
             identity
             timestamp
@@ -312,18 +282,20 @@ export default {
         }
       },
       result({ data }) {
-        this.parsedAccount = {
-          accountId: data.account[0].account_id,
-          availableBalance: data.account[0].available_balance,
-          freeBalance: data.account[0].free_balance,
-          lockedBalance: data.account[0].locked_balance,
-          balances: JSON.parse(data.account[0].balances),
-          blockHeight: data.account[0].block_height,
-          identity:
-            data.account[0].identity !== ``
-              ? JSON.parse(data.account[0].identity)
-              : {},
-          timestamp: data.account[0].timestamp,
+        if (data.account[0]) {
+          this.parsedAccount = {
+            accountId: data.account[0].account_id,
+            availableBalance: data.account[0].available_balance,
+            freeBalance: data.account[0].free_balance,
+            lockedBalance: data.account[0].locked_balance,
+            balances: JSON.parse(data.account[0].balances),
+            nonce: data.account[0].nonce,
+            identity:
+              data.account[0].identity !== ``
+                ? JSON.parse(data.account[0].identity)
+                : {},
+            timestamp: data.account[0].timestamp,
+          }
         }
         this.loading = false
       },
@@ -331,20 +303,3 @@ export default {
   },
 }
 </script>
-<style>
-.identicon {
-  cursor: pointer;
-}
-.account-page .table tr td .identicon {
-  display: inline-block;
-}
-.account-page .amount {
-  color: #ef1073;
-  font-weight: 700;
-}
-.account-page .fiat {
-  color: #ef1073;
-  font-size: 1rem;
-  font-weight: 200;
-}
-</style>

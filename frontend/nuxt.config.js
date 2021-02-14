@@ -1,4 +1,4 @@
-import { network } from './polkastats.config.js'
+import { network } from './frontend.config.js'
 export default {
   // Disable server-side rendering: https://go.nuxtjs.dev/ssr-mode
   ssr: false,
@@ -8,16 +8,21 @@ export default {
 
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    title: 'frontend',
+    title: 'PolkaStats block explorer | Subsocial Network',
     htmlAttrs: {
       lang: 'en',
     },
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: '' },
+      {
+        hid: 'description',
+        name: 'description',
+        content:
+          'PolkaStats block explorer for Subsocial Network, an open protocol for decentralized social networks and marketplaces.',
+      },
     ],
-    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
+    link: [{ rel: 'icon', type: 'image/png', href: '/img/favicon.png' }],
   },
 
   // Global CSS (https://go.nuxtjs.dev/config-css)
@@ -51,6 +56,8 @@ export default {
     '@nuxtjs/fontawesome',
     // https://www.npmjs.com/package/nuxt-clipboard2
     'nuxt-clipboard2',
+    // https://www.npmjs.com/package/cookie-universal-nuxt
+    ['cookie-universal-nuxt', { alias: 'cookies' }],
   ],
 
   // Module configurations

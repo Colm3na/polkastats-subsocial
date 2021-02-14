@@ -5,231 +5,263 @@
         <h1 class="mb-4">
           {{ $t('pages.accounts.active_accounts') }}
         </h1>
-        <!-- Filter -->
-        <b-row>
-          <b-col lg="12" class="mb-3">
-            <b-form-input
-              id="filterInput"
-              v-model="filter"
-              type="search"
-              :placeholder="$t('pages.accounts.search_placeholder')"
-            />
-          </b-col>
-        </b-row>
-        <!-- Mobile sorting -->
-        <div class="row d-block d-sm-block d-md-block d-lg-none d-xl-none">
-          <b-col lg="6" class="my-1">
-            <b-form-group
-              :label="$t('pages.accounts.sort')"
-              label-cols-sm="3"
-              label-align-sm="right"
-              label-size="sm"
-              label-for="sortBySelect"
-              class="mb-4"
-            >
-              <b-input-group size="sm">
-                <b-form-select
-                  id="sortBySelect"
-                  v-model="sortBy"
-                  :options="sortOptions"
-                  class="w-75"
-                >
-                  <template #first>
-                    <option value="">-- none --</option>
-                  </template>
-                </b-form-select>
-                <b-form-select
-                  v-model="sortDesc"
-                  size="sm"
-                  :disabled="!sortBy"
-                  class="w-25"
-                >
-                  <option :value="false">Asc</option>
-                  <option :value="true">Desc</option>
-                </b-form-select>
-              </b-input-group>
-            </b-form-group>
-          </b-col>
+        <div v-if="loading" class="text-center py-4">
+          <Loading />
         </div>
-        <JsonCSV
-          :data="accountsJSON"
-          class="download-csv mb-2"
-          name="polkastats.io_polkadot_accounts.csv"
-        >
-          <i class="fas fa-file-csv"></i>
-          {{ $t('pages.accounts.download_csv') }}
-        </JsonCSV>
-        <!-- Table with sorting and pagination-->
-        <div>
-          <b-table
-            id="accounts-table"
-            striped
-            stacked="md"
-            :fields="fields"
-            :items="accounts"
-            :per-page="perPage"
-            :current-page="currentPage"
-            :sort-by.sync="sortBy"
-            :sort-desc.sync="sortDesc"
-            :filter="filter"
-            :filter-included-fields="filterOn"
-            @filtered="onFiltered"
-          >
-            <template #cell(rank)="data">
-              <p class="text-right mb-0">#{{ data.item.rank }}</p>
-            </template>
-            <template #cell(accountId)="data">
-              <div
-                class="d-block d-sm-block d-md-none d-lg-none d-xl-none text-center"
+        <template v-else>
+          <!-- Filter -->
+          <b-row>
+            <b-col lg="12" class="mb-3">
+              <b-form-input
+                id="filterInput"
+                v-model="filter"
+                type="search"
+                :placeholder="$t('pages.accounts.search_placeholder')"
+              />
+            </b-col>
+          </b-row>
+          <!-- Mobile sorting -->
+          <div class="row d-block d-sm-block d-md-block d-lg-none d-xl-none">
+            <b-col lg="6" class="my-1">
+              <b-form-group
+                :label="$t('pages.accounts.sort')"
+                label-cols-sm="3"
+                label-align-sm="right"
+                label-size="sm"
+                label-for="sortBySelect"
+                class="mb-4"
               >
-                <p class="mb-2">
-                  {{ $t('pages.accounts.rank') }} #{{ data.item.rank }}
-                </p>
-                <Identicon
-                  :key="data.item.accountId"
-                  :address="data.item.accountId"
-                  :size="40"
-                />
-                <nuxt-link
-                  :to="`/account/${data.item.accountId}`"
-                  :title="$t('pages.accounts.account_details')"
-                >
-                  <h4>{{ shortAddress(data.item.accountId) }}</h4>
-                </nuxt-link>
-                <p v-if="data.item.identity.display" class="mb-0">
-                  {{ data.item.identity.display }}
-                </p>
-                <table class="table table-striped mt-4">
-                  <tbody>
-                    <tr>
-                      <td class="text-left">
-                        <strong>{{ $t('pages.accounts.free_balance') }}</strong>
-                      </td>
-                      <td class="text-right">
-                        {{ formatAmount(data.item.freeBalance) }}
-                      </td>
-                    </tr>
-                    <tr>
-                      <td class="text-left">
-                        <strong>{{
-                          $t('pages.accounts.available_balance')
-                        }}</strong>
-                      </td>
-                      <td class="text-right">
-                        {{ formatAmount(data.item.availableBalance) }}
-                      </td>
-                    </tr>
-                    <tr>
-                      <td class="text-left">
-                        <strong>{{
-                          $t('pages.accounts.locked_balance')
-                        }}</strong>
-                      </td>
-                      <td class="text-right">
-                        {{ formatAmount(data.item.lockedBalance) }}
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-              <div class="d-none d-sm-none d-md-block d-lg-block d-xl-block">
-                <Identicon
-                  :key="data.item.accountId"
-                  :address="data.item.accountId"
-                  :size="20"
-                />
-                <nuxt-link
-                  :to="`/account/${data.item.accountId}`"
-                  :title="$t('pages.accounts.account_details')"
-                >
-                  {{ shortAddress(data.item.accountId) }}
-                </nuxt-link>
-              </div>
-            </template>
-            <template #cell(identity)="data">
-              <span v-if="data.item.parentIdentity && data.item.identity">
-                {{ data.item.parentIdentity }} / {{ data.item.identity }}
-              </span>
-              <span v-else>
-                {{ data.item.identity }}
-              </span>
-            </template>
-            <template #cell(freeBalance)="data">
-              <p class="text-right mb-0">
-                {{ formatAmount(data.item.freeBalance) }}
-              </p>
-            </template>
-            <template #cell(lockedBalance)="data">
-              <p class="text-right mb-0">
-                {{ formatAmount(data.item.lockedBalance) }}
-              </p>
-            </template>
-            <template #cell(availableBalance)="data">
-              <p class="text-right mb-0">
-                {{ formatAmount(data.item.availableBalance) }}
-              </p>
-            </template>
-            <template #cell(favorite)="data">
-              <p class="text-center mb-0">
-                <a
-                  class="favorite"
-                  @click="toggleFavorite(data.item.accountId)"
-                >
-                  <i
-                    v-if="data.item.favorite"
-                    v-b-tooltip.hover
-                    class="fas fa-star"
-                    style="color: #f1bd23"
-                    :title="$t('pages.accounts.remove_from_favorites')"
-                  />
-                  <i
-                    v-else
-                    v-b-tooltip.hover
-                    class="fas fa-star"
-                    style="color: #e6dfdf"
-                    :title="$t('pages.accounts.add_to_favorites')"
-                  />
-                </a>
-              </p>
-            </template>
-          </b-table>
-          <div style="display: flex">
-            <b-pagination
-              v-model="currentPage"
-              :total-rows="totalRows"
-              :per-page="perPage"
-              aria-controls="validators-table"
-            />
-            <b-button-group class="mx-4">
-              <b-button
-                v-for="(item, index) in tableOptions"
-                :key="index"
-                @click="handleNumFields(item)"
-              >
-                {{ item }}
-              </b-button>
-            </b-button-group>
+                <b-input-group size="sm">
+                  <b-form-select
+                    id="sortBySelect"
+                    v-model="sortBy"
+                    :options="sortOptions"
+                    class="w-75"
+                  >
+                    <template #first>
+                      <option value="">-- none --</option>
+                    </template>
+                  </b-form-select>
+                  <b-form-select
+                    v-model="sortDesc"
+                    size="sm"
+                    :disabled="!sortBy"
+                    class="w-25"
+                  >
+                    <option :value="false">Asc</option>
+                    <option :value="true">Desc</option>
+                  </b-form-select>
+                </b-input-group>
+              </b-form-group>
+            </b-col>
           </div>
-        </div>
+          <JsonCSV
+            :data="accountsJSON"
+            class="download-csv mb-2"
+            name="subsocial_accounts.csv"
+          >
+            <font-awesome-icon icon="file-csv" />
+            {{ $t('pages.accounts.download_csv') }}
+          </JsonCSV>
+          <!-- Table with sorting and pagination-->
+          <div>
+            <b-table
+              id="accounts-table"
+              striped
+              stacked="md"
+              :fields="fields"
+              :items="parsedAccounts"
+              :per-page="perPage"
+              :current-page="currentPage"
+              :sort-by.sync="sortBy"
+              :sort-desc.sync="sortDesc"
+              :filter="filter"
+              :filter-included-fields="filterOn"
+              @filtered="onFiltered"
+            >
+              <template #cell(rank)="data">
+                <p class="text-right mb-0">#{{ data.item.rank }}</p>
+              </template>
+              <template #cell(account_id)="data">
+                <div
+                  class="d-block d-sm-block d-md-none d-lg-none d-xl-none text-center"
+                >
+                  <p class="mb-2">
+                    {{ $t('pages.accounts.rank') }} #{{ data.item.rank }}
+                  </p>
+                  <Identicon
+                    :key="data.item.account_id"
+                    :address="data.item.account_id"
+                    :size="40"
+                  />
+                  <nuxt-link
+                    :to="`/account/${data.item.account_id}`"
+                    :title="$t('pages.accounts.account_details')"
+                  >
+                    <h4>{{ shortAddress(data.item.account_id) }}</h4>
+                  </nuxt-link>
+                  <p v-if="data.item.identity_display" class="mb-0">
+                    {{ data.item.identity_display }}
+                  </p>
+                  <table class="table table-striped mt-4">
+                    <tbody>
+                      <tr>
+                        <td class="text-left">
+                          <strong>{{
+                            $t('pages.accounts.free_balance')
+                          }}</strong>
+                        </td>
+                        <td class="text-right">
+                          {{ formatAmount(data.item.free_balance) }}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="text-left">
+                          <strong>{{
+                            $t('pages.accounts.available_balance')
+                          }}</strong>
+                        </td>
+                        <td class="text-right">
+                          {{ formatAmount(data.item.available_balance) }}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="text-left">
+                          <strong>{{
+                            $t('pages.accounts.locked_balance')
+                          }}</strong>
+                        </td>
+                        <td class="text-right">
+                          {{ formatAmount(data.item.locked_balance) }}
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div class="d-none d-sm-none d-md-block d-lg-block d-xl-block">
+                  <Identicon
+                    :key="data.item.account_id"
+                    :address="data.item.account_id"
+                    :size="20"
+                  />
+                  <nuxt-link
+                    v-b-tooltip.hover
+                    :to="`/account/${data.item.account_id}`"
+                    :title="$t('pages.accounts.account_details')"
+                  >
+                    {{ shortAddress(data.item.account_id) }}
+                  </nuxt-link>
+                </div>
+              </template>
+              <template #cell(free_balance)="data">
+                <p class="text-right mb-0">
+                  {{ formatAmount(data.item.free_balance) }}
+                </p>
+              </template>
+              <template #cell(locked_balance)="data">
+                <p class="text-right mb-0">
+                  {{ formatAmount(data.item.locked_balance) }}
+                </p>
+              </template>
+              <template #cell(available_balance)="data">
+                <p class="text-right mb-0">
+                  {{ formatAmount(data.item.available_balance) }}
+                </p>
+              </template>
+              <template #cell(favorite)="data">
+                <p class="text-center mb-0">
+                  <a
+                    class="favorite"
+                    @click="toggleFavorite(data.item.account_id)"
+                  >
+                    <font-awesome-icon
+                      v-if="data.item.favorite"
+                      v-b-tooltip.hover
+                      icon="star"
+                      style="color: #f1bd23; cursor: pointer"
+                      :title="$t('pages.accounts.remove_from_favorites')"
+                    />
+                    <font-awesome-icon
+                      v-else
+                      v-b-tooltip.hover
+                      icon="star"
+                      style="color: #e6dfdf; cursor: pointer"
+                      :title="$t('pages.accounts.add_to_favorites')"
+                    />
+                  </a>
+                </p>
+              </template>
+            </b-table>
+          </div>
+          <!-- pagination -->
+          <div class="row">
+            <div class="col-6">
+              <!-- desktop -->
+              <div class="d-none d-sm-none d-md-none d-lg-block d-xl-block">
+                <b-button-group>
+                  <b-button
+                    v-for="(option, index) in paginationOptions"
+                    :key="index"
+                    :class="{ 'selected-per-page': perPage === option }"
+                    variant="outline-secondary"
+                    @click="setPageSize(option)"
+                  >
+                    {{ option }}
+                  </b-button>
+                </b-button-group>
+              </div>
+              <!-- mobile -->
+              <div class="d-block d-sm-block d-md-block d-lg-none d-xl-none">
+                <b-dropdown
+                  class="m-md-2"
+                  text="Page size"
+                  variant="outline-secondary"
+                >
+                  <b-dropdown-item
+                    v-for="(option, index) in paginationOptions"
+                    :key="index"
+                    @click="setPageSize(10)"
+                  >
+                    {{ option }}
+                  </b-dropdown-item>
+                </b-dropdown>
+              </div>
+            </div>
+            <div class="col-6">
+              <b-pagination
+                v-model="currentPage"
+                :total-rows="totalRows"
+                :per-page="perPage"
+                aria-controls="my-table"
+                variant="dark"
+                align="right"
+              ></b-pagination>
+            </div>
+          </div>
+        </template>
       </b-container>
     </section>
   </div>
 </template>
 <script>
+import gql from 'graphql-tag'
 import JsonCSV from 'vue-json-csv'
 import Identicon from '@/components/Identicon.vue'
+import Loading from '@/components/Loading.vue'
 import commonMixin from '@/mixins/commonMixin.js'
-import { paginationOptions, network } from '@/polkastats.config.js'
+import { paginationOptions } from '@/frontend.config.js'
 
 export default {
   components: {
+    Loading,
     Identicon,
     JsonCSV,
   },
   mixins: [commonMixin],
   data() {
     return {
-      tableOptions: paginationOptions,
+      loading: true,
+      paginationOptions,
       perPage: localStorage.paginationOptions
         ? parseInt(localStorage.paginationOptions)
         : 10,
@@ -246,27 +278,21 @@ export default {
           sortable: true,
           class: `d-none d-sm-none d-md-table-cell d-lg-table-cell d-xl-table-cell`,
         },
-        { key: 'accountId', label: 'Account', sortable: true },
+        { key: 'account_id', label: 'Account', sortable: true },
         {
-          key: 'identity',
-          label: this.$t('pages.accounts.identity'),
-          sortable: true,
-          class: `d-none d-sm-none d-md-table-cell d-lg-table-cell d-xl-table-cell`,
-        },
-        {
-          key: 'freeBalance',
+          key: 'free_balance',
           label: this.$t('pages.accounts.free_balance'),
           sortable: true,
           class: `d-none d-sm-none d-md-table-cell d-lg-table-cell d-xl-table-cell`,
         },
         {
-          key: 'lockedBalance',
+          key: 'locked_balance',
           label: this.$t('pages.accounts.locked_balance'),
           sortable: true,
           class: `d-none d-sm-none d-md-table-cell d-lg-table-cell d-xl-table-cell`,
         },
         {
-          key: 'availableBalance',
+          key: 'available_balance',
           label: this.$t('pages.accounts.available_balance'),
           sortable: true,
           class: `d-none d-sm-none d-md-table-cell d-lg-table-cell d-xl-table-cell`,
@@ -278,32 +304,18 @@ export default {
           class: `d-none d-sm-none d-md-table-cell d-lg-table-cell d-xl-table-cell`,
         },
       ],
+      accounts: [],
       favorites: [],
       polling: null,
     }
   },
-  head() {
-    return {
-      title: this.$t('pages.accounts.head_title', {
-        networkName: network.name,
-      }),
-      meta: [
-        {
-          hid: 'description',
-          name: 'description',
-          content: this.$tc('pages.accounts.head_content', {
-            networkName: network.name,
-          }),
-        },
-      ],
-    }
-  },
   computed: {
-    accounts() {
-      return this.$store.state.accounts.list.map((account) => {
+    parsedAccounts() {
+      return this.accounts.map((account, index) => {
         return {
+          rank: index + 1,
           ...account,
-          favorite: this.isFavorite(account.accountId),
+          favorite: this.isFavorite(account.account_id),
         }
       })
     },
@@ -316,17 +328,7 @@ export default {
         })
     },
     accountsJSON() {
-      return this.accounts.map((account) => {
-        return {
-          rank: account.rank,
-          account_id: account.accountId,
-          identity_display_parent: account.parentIdentity,
-          identity_display: account.identity,
-          available_balance: account.availableBalance,
-          free_balance: account.freeBalance,
-          locked_balance: account.lockedBalance,
-        }
-      })
+      return this.parsedAccounts
     },
   },
   watch: {
@@ -337,31 +339,18 @@ export default {
       })
     },
   },
-  async created() {
-    const vm = this
-
-    // Get favorites from cookie
-    // if (this.$cookies.get('favorites')) {
-    //   this.favorites = this.$cookies.get('favorites')
-    // }
-
-    // Force update of account list if empty
-    if (this.$store.state.accounts.list.length === 0) {
-      await vm.$store.dispatch('accounts/update')
+  created() {
+    // get favorites from cookie
+    if (this.$cookies.get('favorites')) {
+      this.favorites = this.$cookies.get('favorites')
     }
-    this.totalRows = this.$store.state.accounts.list.length
-
-    // Update data every 5 minutes
-    this.polling = setInterval(() => {
-      vm.$store.dispatch('accounts/update')
-      if (!this.filter) this.totalRows = this.$store.state.accounts.list.length
-    }, 300000)
   },
   beforeDestroy() {
     clearInterval(this.polling)
   },
   methods: {
-    handleNumFields(num) {
+    setPageSize(num) {
+      localStorage.paginationOptions = num
       this.perPage = parseInt(num)
     },
     toggleFavorite(accountId) {
@@ -381,28 +370,28 @@ export default {
       this.currentPage = 1
     },
   },
+  apollo: {
+    $subscribe: {
+      accounts: {
+        query: gql`
+          query account {
+            account(order_by: { free_balance: desc }, where: {}) {
+              account_id
+              identity_display
+              identity_display_parent
+              available_balance
+              free_balance
+              locked_balance
+            }
+          }
+        `,
+        result({ data }) {
+          this.accounts = data.account
+          this.totalRows = this.accounts.length
+          this.loading = false
+        },
+      },
+    },
+  },
 }
 </script>
-<style>
-#accounts-table th {
-  text-align: center;
-}
-.page-accounts .identicon {
-  display: inline-block;
-}
-
-.page-accounts td div {
-  padding: 0 !important;
-}
-.btn-group {
-  margin-bottom: 1rem;
-  display: inline-flex;
-}
-.btn-secondary {
-  font-size: 0.8rem;
-}
-.download-csv {
-  cursor: pointer;
-  text-align: right;
-}
-</style>

@@ -19,7 +19,6 @@
               :key="data.item.signer"
               :address="data.item.signer"
               :size="20"
-              :theme="'substrate'"
             />
             <nuxt-link
               v-b-tooltip.hover
@@ -53,7 +52,7 @@ export default {
       fields: [
         {
           key: 'block_number',
-          label: 'Id',
+          label: 'Block',
           sortable: true,
         },
         {

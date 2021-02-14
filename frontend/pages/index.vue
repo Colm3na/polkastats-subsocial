@@ -3,6 +3,7 @@
     <section>
       <b-container class="main py-5 dashboard">
         <Chain />
+        <Search />
         <div class="row">
           <div class="col-md-6 mb-4">
             <h3>
@@ -65,8 +66,9 @@ import LastActivity from '@/components/LastActivity.vue'
 import LastExtrinsics from '@/components/LastExtrinsics.vue'
 import LastEvents from '@/components/LastEvents.vue'
 import Chain from '@/components/Chain.vue'
+import Search from '@/components/Search.vue'
 // import Top10Rich from '@/components/Top10Rich.vue'
-import { network } from '@/polkastats.config.js'
+import { network } from '@/frontend.config.js'
 
 export default {
   components: {
@@ -75,6 +77,7 @@ export default {
     LastExtrinsics,
     LastEvents,
     Chain,
+    Search,
     // Top10Rich,
   },
   data: () => {
@@ -82,26 +85,5 @@ export default {
       network,
     }
   },
-  head() {
-    return {
-      title: 'title',
-      meta: [
-        {
-          hid: 'description',
-          name: 'description',
-          content: 'description',
-        },
-      ],
-    }
-  },
 }
 </script>
-<style>
-.dashboard .clipboard {
-  display: inline-block;
-}
-.dashboard .identicon {
-  margin-right: 0.2rem;
-  cursor: copy;
-}
-</style>
