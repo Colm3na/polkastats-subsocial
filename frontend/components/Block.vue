@@ -118,12 +118,12 @@
                     <td>
                       <font-awesome-icon
                         v-if="extrinsic.success"
-                        icon="check-circle"
+                        icon="check"
                         class="text-success"
                       />
                       <font-awesome-icon
                         v-else
-                        icon="check-circle"
+                        icon="times"
                         class="text-danger"
                       />
                     </td>

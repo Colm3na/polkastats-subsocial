@@ -77,12 +77,12 @@
                       <td class="text-right">
                         <font-awesome-icon
                           v-if="parsedExtrinsic.success"
-                          icon="check-circle"
+                          icon="check"
                           class="text-success"
                         />
                         <font-awesome-icon
                           v-else
-                          icon="check-circle"
+                          icon="times"
                           class="text-danger"
                         />
                       </td>

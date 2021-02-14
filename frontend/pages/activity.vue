@@ -49,12 +49,12 @@
                   <p class="mb-0">
                     <font-awesome-icon
                       v-if="data.item.success"
-                      icon="check-circle"
+                      icon="check"
                       class="text-success"
                     />
                     <font-awesome-icon
                       v-else
-                      icon="check-circle"
+                      icon="times"
                       class="text-danger"
                     />
                   </p>
