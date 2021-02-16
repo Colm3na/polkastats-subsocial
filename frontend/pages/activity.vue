@@ -10,7 +10,7 @@
           </b-col>
           <b-col cols="4">
             <p v-if="totalRows !== 1" class="mt-3 mb-0 text-right">
-              {{ formatNumber(totalRows) }} rows found
+              {{ formatNumber(totalRows) }}
             </p>
           </b-col>
         </b-row>
