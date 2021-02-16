@@ -187,6 +187,12 @@
               <b-tabs class="mt-4" content-class="mt-4" fill>
                 <b-tab active>
                   <template #title>
+                    <h5>Activity</h5>
+                  </template>
+                  <Activities :account-id="accountId" />
+                </b-tab>
+                <b-tab>
+                  <template #title>
                     <h5>Sent transfers</h5>
                   </template>
                   <SentTransfers :account-id="accountId" />
@@ -209,6 +215,7 @@
 import gql from 'graphql-tag'
 import Identicon from '@/components/Identicon.vue'
 import Loading from '@/components/Loading.vue'
+import Activities from '@/components/Activities.vue'
 import SentTransfers from '@/components/SentTransfers.vue'
 import ReceivedTransfers from '@/components/ReceivedTransfers.vue'
 import commonMixin from '@/mixins/commonMixin.js'
@@ -218,6 +225,7 @@ export default {
   components: {
     Identicon,
     Loading,
+    Activities,
     SentTransfers,
     ReceivedTransfers,
   },
