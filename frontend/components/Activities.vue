@@ -8,7 +8,7 @@
     </div>
     <div v-else>
       <!-- Filter -->
-      <b-row style="margin-bottom: 1rem">
+      <!-- <b-row style="margin-bottom: 1rem">
         <b-col cols="12">
           <b-form-input
             id="filterInput"
@@ -17,7 +17,7 @@
             :placeholder="$t('components.transfers.search')"
           />
         </b-col>
-      </b-row>
+      </b-row> -->
       <JsonCSV
         :data="activities"
         class="download-csv mb-2"
