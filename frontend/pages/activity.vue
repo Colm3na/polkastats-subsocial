@@ -17,7 +17,7 @@
                   id="filterInput"
                   v-model="filter"
                   type="search"
-                  :placeholder="$t('pages.blocks.search_placeholder')"
+                  :placeholder="$t('pages.activity.search_placeholder')"
                 />
               </b-col>
             </b-row>
@@ -33,6 +33,22 @@
                       {{ data.item.block_number }}-{{
                         data.item.extrinsic_index
                       }}
+                    </nuxt-link>
+                  </p>
+                </template>
+                <template #cell(signer)="data">
+                  <p class="mb-0">
+                    <Identicon
+                      :key="data.item.signer"
+                      :address="data.item.signer"
+                      :size="20"
+                    />
+                    <nuxt-link
+                      v-b-tooltip.hover
+                      :to="`/account/${data.item.signer}`"
+                      :title="$t('pages.accounts.account_details')"
+                    >
+                      {{ shortAddress(data.item.signer) }}
                     </nuxt-link>
                   </p>
                 </template>
@@ -127,7 +143,7 @@ export default {
   data() {
     return {
       loading: true,
-      filter: '',
+      filter: null,
       extrinsics: [],
       paginationOptions,
       perPage: localStorage.paginationOptions
@@ -139,6 +155,11 @@ export default {
         {
           key: 'block_number',
           label: 'Extrinsic',
+          sortable: true,
+        },
+        {
+          key: 'signer',
+          label: 'Signer',
           sortable: true,
         },
         {
@@ -171,6 +192,8 @@ export default {
         query: gql`
           subscription extrinsics(
             $blockNumber: bigint
+            $extrinsicHash: String
+            $signer: String
             $perPage: Int!
             $offset: Int!
           ) {
@@ -179,7 +202,9 @@ export default {
               offset: $offset
               where: {
                 block_number: { _eq: $blockNumber }
+                hash: { _eq: $extrinsicHash }
                 is_signed: { _eq: true }
+                signer: { _eq: $signer }
               }
               order_by: { block_number: desc, extrinsic_index: desc }
             ) {
@@ -196,31 +221,50 @@ export default {
         `,
         variables() {
           return {
-            blockNumber: this.filter ? parseInt(this.filter) : undefined,
+            blockNumber: this.isBlockNumber(this.filter)
+              ? parseInt(this.filter)
+              : undefined,
+            extrinsicHash: this.isHash(this.filter) ? this.filter : undefined,
+            signer: this.isAddress(this.filter) ? this.filter : undefined,
             perPage: this.perPage,
             offset: (this.currentPage - 1) * this.perPage,
           }
         },
         result({ data }) {
           this.extrinsics = data.extrinsic
-          if (this.filter) {
-            this.totalRows = this.extrinsics.length
-          }
           this.loading = false
         },
       },
-      totalExtrinsics: {
+      count: {
         query: gql`
-          subscription total {
-            total(where: { name: { _eq: "extrinsics" } }, limit: 1) {
-              count
+          subscription count(
+            $blockNumber: bigint
+            $extrinsicHash: String
+            $signer: String
+          ) {
+            extrinsic_aggregate(
+              where: {
+                block_number: { _eq: $blockNumber }
+                hash: { _eq: $extrinsicHash }
+                is_signed: { _eq: true }
+                signer: { _eq: $signer }
+              }
+            ) {
+              aggregate {
+                count
+              }
             }
           }
         `,
-        result({ data }) {
-          if (!this.filter) {
-            this.totalRows = data.total[0].count
+        variables() {
+          return {
+            blockNumber: this.filter ? parseInt(this.filter) : undefined,
+            extrinsicHash: this.isHash(this.filter) ? this.filter : undefined,
+            signer: this.isAddress(this.filter) ? this.filter : undefined,
           }
+        },
+        result({ data }) {
+          this.totalRows = data.extrinsic_aggregate.aggregate.count
         },
       },
     },

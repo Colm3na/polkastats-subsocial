@@ -32,7 +32,7 @@
       "progress": "Progreso"
     },
     "transfers": {
-      "search": "Buscar transferencia por número de bloque, hash, dirección de procedencia o dirección de destino",
+      "search": "Buscar transferencia por número de bloque, hash o dirección de procedencia",
       "no_transfer_found": "No se han encontrado transferencias"
     },
     "loading": {
@@ -174,10 +174,12 @@
       "title": "Extrinsics"
     },
     "transfers": {
-      "title": "Transferencias"
+      "title": "Transferencias",
+      "search_placeholder": "Buscar transferencia por número de bloque, hash o dirección de procedencia"
     },
     "activity": {
-      "title": "Actividad"
+      "title": "Actividad",
+      "search_placeholder": "Buscar actividad por número de bloque, hash o dirección de procedencia"
     },
     "events": {
       "title": "Eventos",

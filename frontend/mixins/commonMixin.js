@@ -1,5 +1,6 @@
 import { isHex } from '@polkadot/util'
 import { BigNumber } from 'bignumber.js'
+import gql from 'graphql-tag'
 import { network } from '@/frontend.config.js'
 
 export default {
@@ -30,6 +31,55 @@ export default {
     capitalize(s) {
       if (typeof s !== 'string') return ''
       return s.charAt(0).toUpperCase() + s.slice(1)
+    },
+    isBlockNumber(input) {
+      const polkadotRegexp = /^[0-9]*$/
+      return polkadotRegexp.test(input)
+    },
+    async isBlockHash(input) {
+      // 0xadb2179b1666fef3b56a5762c3db0152b2a0a7f3d4b47737a355262609d867b9
+      if (input.length === 66 && input.startsWith('0x')) {
+        const client = this.$apollo.provider.defaultClient
+        const query = gql`
+          query block {
+            block(limit: 1, where: {block_hash: {_eq: "${input}"}}) {
+              block_number
+            }
+          }
+        `
+        const response = await client.query({ query })
+        return response.data.block.length > 0
+      }
+      return false
+    },
+    async isExtrinsicHash(input) {
+      // 0x3eab8af8321eb77e425396d029486739b7563965a4052211d5076a9e80f6010e
+      if (input.length === 66 && input.startsWith('0x')) {
+        const client = this.$apollo.provider.defaultClient
+        const query = gql`
+          query extrinsic {
+            extrinsic(limit: 1, where: {hash: {_eq: "${input}"}}) {
+              block_number
+            }
+          }
+        `
+        const response = await client.query({ query })
+        return response.data.extrinsic.length > 0
+      }
+      return false
+    },
+    isHash(input) {
+      // 0x3eab8af8321eb77e425396d029486739b7563965a4052211d5076a9e80f6010e
+      if (input) {
+        if (input.length === 66 && input.startsWith('0x')) {
+          return true
+        }
+      }
+      return false
+    },
+    isAddress(input) {
+      const polkadotRegexp = /^(([0-9a-zA-Z]{47})|([0-9a-zA-Z]{48}))$/
+      return polkadotRegexp.test(input)
     },
   },
 }

@@ -14,8 +14,9 @@
 </template>
 
 <script>
-import gql from 'graphql-tag'
+import commonMixin from '@/mixins/commonMixin.js'
 export default {
+  mixins: [commonMixin],
   data() {
     return {
       searchInput: '',
@@ -42,45 +43,6 @@ export default {
           })
         }
       }
-    },
-    isBlockNumber(input) {
-      return Number.isInteger(Number(input))
-    },
-    async isBlockHash(input) {
-      // 0xadb2179b1666fef3b56a5762c3db0152b2a0a7f3d4b47737a355262609d867b9
-      if (input.length === 66 && input.startsWith('0x')) {
-        const client = this.$apollo.provider.defaultClient
-        const query = gql`
-          query block {
-            block(limit: 1, where: {block_hash: {_eq: "${input}"}}) {
-              block_number
-            }
-          }
-        `
-        const response = await client.query({ query })
-        return response.data.block.length > 0
-      }
-      return false
-    },
-    async isExtrinsicHash(input) {
-      // 0x3eab8af8321eb77e425396d029486739b7563965a4052211d5076a9e80f6010e
-      if (input.length === 66 && input.startsWith('0x')) {
-        const client = this.$apollo.provider.defaultClient
-        const query = gql`
-          query extrinsic {
-            extrinsic(limit: 1, where: {hash: {_eq: "${input}"}}) {
-              block_number
-            }
-          }
-        `
-        const response = await client.query({ query })
-        return response.data.extrinsic.length > 0
-      }
-      return false
-    },
-    isAddress(input) {
-      const polkadotRegexp = /^(([0-9a-zA-Z]{47})|([0-9a-zA-Z]{48}))$/
-      return polkadotRegexp.test(input)
     },
   },
 }

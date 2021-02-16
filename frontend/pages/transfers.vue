@@ -17,21 +17,12 @@
                   id="filterInput"
                   v-model="filter"
                   type="search"
-                  :placeholder="$t('components.transfers.search')"
+                  :placeholder="$t('pages.transfers.search_placeholder')"
                 />
               </b-col>
             </b-row>
             <div class="table-responsive">
-              <b-table
-                striped
-                hover
-                :fields="fields"
-                :per-page="perPage"
-                :current-page="currentPage"
-                :items="transfers"
-                :filter="filter"
-                @filtered="onFiltered"
-              >
+              <b-table striped hover :fields="fields" :items="transfers">
                 <template #cell(block_number)="data">
                   <p class="mb-0">
                     <nuxt-link
@@ -170,7 +161,6 @@ export default {
     return {
       loading: true,
       filter: null,
-      filterOn: [],
       transfers: [],
       paginationOptions,
       perPage: localStorage.paginationOptions
@@ -217,23 +207,27 @@ export default {
       localStorage.paginationOptions = num
       this.perPage = parseInt(num)
     },
-    onFiltered(filteredItems) {
-      // Trigger pagination to update the number of buttons/pages due to filtering
-      this.totalRows = filteredItems.length
-      this.currentPage = 1
-    },
   },
   apollo: {
     $subscribe: {
       extrinsic: {
         query: gql`
-          subscription extrinsic($perPage: Int!, $offset: Int!) {
+          subscription extrinsic(
+            $blockNumber: bigint
+            $extrinsicHash: String
+            $fromAddress: String
+            $perPage: Int!
+            $offset: Int!
+          ) {
             extrinsic(
               limit: $perPage
               offset: $offset
               where: {
                 section: { _eq: "balances" }
                 method: { _like: "transfer%" }
+                block_number: { _eq: $blockNumber }
+                hash: { _eq: $extrinsicHash }
+                signer: { _eq: $fromAddress }
               }
               order_by: { block_number: desc, extrinsic_index: desc }
             ) {
@@ -247,6 +241,11 @@ export default {
         `,
         variables() {
           return {
+            blockNumber: this.isBlockNumber(this.filter)
+              ? parseInt(this.filter)
+              : undefined,
+            extrinsicHash: this.isHash(this.filter) ? this.filter : undefined,
+            fromAddress: this.isAddress(this.filter) ? this.filter : undefined,
             perPage: this.perPage,
             offset: (this.currentPage - 1) * this.perPage,
           }
@@ -262,8 +261,43 @@ export default {
               success: transfer.success,
             }
           })
-          this.totalRows = this.transfers.length
           this.loading = false
+        },
+      },
+      count: {
+        query: gql`
+          subscription count(
+            $blockNumber: bigint
+            $extrinsicHash: String
+            $fromAddress: String
+            $toAddress: String
+          ) {
+            extrinsic_aggregate(
+              where: {
+                section: { _eq: "balances" }
+                method: { _like: "transfer%" }
+                block_number: { _eq: $blockNumber }
+                hash: { _eq: $extrinsicHash }
+                signer: { _eq: $fromAddress }
+              }
+            ) {
+              aggregate {
+                count
+              }
+            }
+          }
+        `,
+        variables() {
+          return {
+            blockNumber: this.isBlockNumber(this.filter)
+              ? parseInt(this.filter)
+              : undefined,
+            extrinsicHash: this.isHash(this.filter) ? this.filter : undefined,
+            fromAddress: this.isAddress(this.filter) ? this.filter : undefined,
+          }
+        },
+        result({ data }) {
+          this.totalRows = data.extrinsic_aggregate.aggregate.count
         },
       },
     },
