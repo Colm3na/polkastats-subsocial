@@ -2,9 +2,18 @@
   <div>
     <section>
       <b-container class="page-accounts main py-5">
-        <h1 class="mb-4">
-          {{ $t('pages.accounts.active_accounts') }}
-        </h1>
+        <b-row class="mb-2">
+          <b-col cols="8">
+            <h1>
+              {{ $t('pages.accounts.active_accounts') }}
+            </h1>
+          </b-col>
+          <b-col cols="4">
+            <p v-if="totalRows !== 1" class="mt-3 mb-0 text-right">
+              {{ formatNumber(totalRows) }} found
+            </p>
+          </b-col>
+        </b-row>
         <div v-if="loading" class="text-center py-4">
           <Loading />
         </div>
