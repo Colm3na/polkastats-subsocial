@@ -19,7 +19,7 @@
                   <tbody>
                     <tr>
                       <td>Block number</td>
-                      <td class="text-right">
+                      <td>
                         <nuxt-link
                           v-b-tooltip.hover
                           :to="`/block?blockNumber=${blockNumber}`"
@@ -31,50 +31,73 @@
                     </tr>
                     <tr>
                       <td>Extrinsic index</td>
-                      <td class="text-right">
+                      <td>
                         {{ parsedExtrinsic.extrinsic_index }}
                       </td>
                     </tr>
                     <tr>
                       <td>Hash</td>
-                      <td class="text-right">
+                      <td>
                         {{ parsedExtrinsic.hash }}
                       </td>
                     </tr>
                     <tr>
                       <td>Signed?</td>
-                      <td class="text-right">
+                      <td>
                         {{ parsedExtrinsic.is_signed }}
                       </td>
                     </tr>
                     <tr>
                       <td>Signer</td>
-                      <td class="text-right">
-                        {{ parsedExtrinsic.signer }}
+                      <td>
+                        <p v-if="parsedExtrinsic.signer" class="mb-0">
+                          <Identicon
+                            :key="parsedExtrinsic.signer"
+                            :address="parsedExtrinsic.signer"
+                            :size="20"
+                          />
+                          <nuxt-link
+                            v-b-tooltip.hover
+                            :to="`/account/${parsedExtrinsic.signer}`"
+                            :title="$t('pages.accounts.account_details')"
+                          >
+                            {{ shortAddress(parsedExtrinsic.signer) }}
+                          </nuxt-link>
+                        </p>
                       </td>
                     </tr>
                     <tr>
                       <td>Extrinsic</td>
-                      <td class="text-right">
+                      <td>
                         {{ parsedExtrinsic.section }} ➡
                         {{ parsedExtrinsic.method }}
                       </td>
                     </tr>
                     <tr>
-                      <td>Doc</td>
-                      <td class="text-right">
-                        {{ parsedExtrinsic.doc }}
+                      <td>Activity</td>
+                      <td>
+                        <component
+                          :is="extrinsicComponent"
+                          :signer="parsedExtrinsic.signer"
+                          :args="JSON.parse(parsedExtrinsic.args)"
+                        />
                       </td>
                     </tr>
                     <tr>
                       <td>Args</td>
-                      <td class="text-right">
-                        {{ parsedExtrinsic.args }}
+                      <td>
+                        <pre class="mb-0">{{
+                          JSON.stringify(
+                            JSON.parse(parsedExtrinsic.args),
+                            null,
+                            2
+                          )
+                        }}</pre>
                       </td>
                     </tr>
                     <tr>
                       <td>Success</td>
-                      <td class="text-right">
+                      <td>
                         <font-awesome-icon
                           v-if="parsedExtrinsic.success"
                           icon="check"
@@ -99,12 +122,32 @@
 </template>
 <script>
 import Loading from '@/components/Loading.vue'
+import {
+  CreatePost,
+  UpdatePost,
+  CreatePostReaction,
+  CreateProfile,
+  Drip,
+  CreateSpace,
+  UpdateSpace,
+  FollowSpace,
+  FollowAccount,
+} from '@/components/extrinsics/index.js'
 import commonMixin from '@/mixins/commonMixin.js'
 import gql from 'graphql-tag'
 
 export default {
   components: {
     Loading,
+    CreatePost,
+    UpdatePost,
+    CreatePostReaction,
+    CreateProfile,
+    Drip,
+    CreateSpace,
+    UpdateSpace,
+    FollowSpace,
+    FollowAccount,
   },
   mixins: [commonMixin],
   data() {
@@ -114,6 +157,57 @@ export default {
       extrinsicIndex: this.$route.params.index,
       parsedExtrinsic: undefined,
     }
+  },
+  computed: {
+    extrinsicComponent() {
+      if (
+        this.parsedExtrinsic.section === 'posts' &&
+        this.parsedExtrinsic.method === 'createPost'
+      ) {
+        return 'CreatePost'
+      } else if (
+        this.parsedExtrinsic.section === 'posts' &&
+        this.parsedExtrinsic.method === 'updatePost'
+      ) {
+        return 'UpdatePost'
+      } else if (
+        this.parsedExtrinsic.section === 'reactions' &&
+        this.parsedExtrinsic.method === 'createPostReaction'
+      ) {
+        return 'CreatePostReaction'
+      } else if (
+        this.parsedExtrinsic.section === 'profiles' &&
+        this.parsedExtrinsic.method === 'createProfile'
+      ) {
+        return 'CreateProfile'
+      } else if (
+        this.parsedExtrinsic.section === 'faucets' &&
+        this.parsedExtrinsic.method === 'drip'
+      ) {
+        return 'Drip'
+      } else if (
+        this.parsedExtrinsic.section === 'spaceFollows' &&
+        this.parsedExtrinsic.method === 'followSpace'
+      ) {
+        return 'FollowSpace'
+      } else if (
+        this.parsedExtrinsic.section === 'profileFollows' &&
+        this.parsedExtrinsic.method === 'followAccount'
+      ) {
+        return 'FollowAccount'
+      } else if (
+        this.parsedExtrinsic.section === 'spaces' &&
+        this.parsedExtrinsic.method === 'createSpace'
+      ) {
+        return 'CreateSpace'
+      } else if (
+        this.parsedExtrinsic.section === 'spaces' &&
+        this.parsedExtrinsic.method === 'updateSpace'
+      ) {
+        return 'UpdateSpace'
+      }
+      return undefined
+    },
   },
   watch: {
     $route() {

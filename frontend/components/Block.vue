@@ -75,7 +75,7 @@
                     <th>{{ $t('details.block.signer') }}</th>
                     <th>{{ $t('details.block.section') }}</th>
                     <th>{{ $t('details.block.method') }}</th>
-                    <th>{{ $t('details.block.args') }}</th>
+                    <th>{{ $t('details.block.activity') }}</th>
                     <th>{{ $t('details.block.success') }}</th>
                   </tr>
                 </thead>
@@ -114,7 +114,19 @@
                     </td>
                     <td>{{ extrinsic.section }}</td>
                     <td>{{ extrinsic.method }}</td>
-                    <td>{{ extrinsic.args }}</td>
+                    <td>
+                      <component
+                        :is="
+                          getExtrinsicComponent(
+                            extrinsic.section,
+                            extrinsic.method
+                          )
+                        "
+                        :activity-only="true"
+                        :signer="extrinsic.signer"
+                        :args="JSON.parse(extrinsic.args)"
+                      />
+                    </td>
                     <td>
                       <font-awesome-icon
                         v-if="extrinsic.success"
@@ -208,9 +220,29 @@
 <script>
 import Identicon from '@/components/Identicon.vue'
 import commonMixin from '@/mixins/commonMixin.js'
+import {
+  CreatePost,
+  UpdatePost,
+  CreatePostReaction,
+  CreateProfile,
+  Drip,
+  CreateSpace,
+  UpdateSpace,
+  FollowSpace,
+  FollowAccount,
+} from '@/components/extrinsics/index.js'
 export default {
   components: {
     Identicon,
+    CreatePost,
+    UpdatePost,
+    CreatePostReaction,
+    CreateProfile,
+    Drip,
+    CreateSpace,
+    UpdateSpace,
+    FollowSpace,
+    FollowAccount,
   },
   mixins: [commonMixin],
   props: {
@@ -235,6 +267,28 @@ export default {
       const newDate = new Date()
       newDate.setTime(timestamp * 1000)
       return newDate.toUTCString()
+    },
+    getExtrinsicComponent(section, method) {
+      if (section === 'posts' && method === 'createPost') {
+        return 'CreatePost'
+      } else if (section === 'posts' && method === 'updatePost') {
+        return 'UpdatePost'
+      } else if (section === 'reactions' && method === 'createPostReaction') {
+        return 'CreatePostReaction'
+      } else if (section === 'profiles' && method === 'createProfile') {
+        return 'CreateProfile'
+      } else if (section === 'faucets' && method === 'drip') {
+        return 'Drip'
+      } else if (section === 'spaceFollows' && method === 'followSpace') {
+        return 'FollowSpace'
+      } else if (section === 'profileFollows' && method === 'followAccount') {
+        return 'FollowAccount'
+      } else if (section === 'spaces' && method === 'createSpace') {
+        return 'CreateSpace'
+      } else if (section === 'spaces' && method === 'updateSpace') {
+        return 'UpdateSpace'
+      }
+      return undefined
     },
   },
 }

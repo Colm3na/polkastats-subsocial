@@ -31,6 +31,7 @@
     "@nuxtjs/axios": "^5.12.5",
     "@nuxtjs/fontawesome": "^1.1.2",
     "@polkadot/vue-identicon": "^0.68.1",
+    "@vue/composition-api": "^1.0.0-rc.2",
     "bootstrap": "^4.5.3",
     "bootstrap-vue": "^2.21.2",
     "cookie-universal-nuxt": "^2.1.4",

@@ -225,6 +225,7 @@
       "hash": "Hash",
       "signer": "Signer",
       "args": "Arguments",
+      "activity": "Activity",
       "phase": "Phase",
       "data": "Data",
       "account_details": "Account details",

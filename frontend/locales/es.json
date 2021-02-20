@@ -227,6 +227,7 @@
       "signer": "Firmante",
       "hash": "Hash",
       "args": "Argumentos",
+      "activity": "Actividad",
       "timestamp": "Fecha y hora",
       "genesis": "🎁 Bloque génesis",
       "success": "Resultado",
