@@ -1,4 +1,4 @@
-version: '3.7'
+version: "3.7"
 
 services:
   #
@@ -8,13 +8,13 @@ services:
     image: dappforce/subsocial-node:latest
     hostname: substrate-node
     volumes:
-      - 'substrate-data:/data'
+      - "substrate-data:/data"
     ports:
-      - '30333:30333'
-      - '9933:9933'
-      - '9944:9944'
+      - "30333:30333"
+      - "9933:9933"
+      - "9944:9944"
     expose:
-      - '9944'
+      - "9944"
     command: subsocial-node -d /data --pruning=archive --db-cache 1024 --rpc-cors "*" --ws-port 9944 --port 30333 --unsafe-ws-external --no-prometheus --name 'PolkaStats Subsocial' --bootnodes /dns/val-1.subsocial.network/tcp/30334/p2p/12D3KooWKFz5rXHRLDdYR67QSsGyV7UykXFt9eoU6fg1ieRUk8yB
     restart: on-failure
 
@@ -25,13 +25,13 @@ services:
     image: postgres
     restart: always
     volumes:
-      - 'db-data:/var/lib/postgresql/data'
-      - './sql/backend.sql:/docker-entrypoint-initdb.d/backend.sql'
+      - "db-data:/var/lib/postgresql/data"
+      - "./sql/backend.sql:/docker-entrypoint-initdb.d/backend.sql"
     environment:
-      POSTGRES_USER: 'polkastats'
-      POSTGRES_PASSWORD: 'polkastats'
+      POSTGRES_USER: "polkastats"
+      POSTGRES_PASSWORD: "polkastats"
     healthcheck:
-      test: ['CMD-SHELL', 'pg_isready -U polkastats']
+      test: ["CMD-SHELL", "pg_isready -U polkastats"]
       interval: 5s
       timeout: 5s
       retries: 5
@@ -41,16 +41,16 @@ services:
   graphql-engine:
     image: hasura/graphql-engine:v1.3.3
     ports:
-      - '8082:8080'
+      - "8082:8080"
     depends_on:
-      - 'postgres'
+      - "postgres"
     restart: always
     environment:
       HASURA_GRAPHQL_DATABASE_URL: postgres://polkastats:polkastats@postgres:5432/polkastats
-      HASURA_GRAPHQL_ENABLE_CONSOLE: 'false' # set to "false" to disable console
+      HASURA_GRAPHQL_ENABLE_CONSOLE: "true" # set to "false" to disable console
       HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
-      ## uncomment next line to set an admin secret
-      # HASURA_GRAPHQL_ADMIN_SECRET: myadminsecretkey
+      HASURA_GRAPHQL_JWT_SECRET: '{"type": "HS256","key": "elcieloestaenladrilladoquienlodesenladrillara"}'
+      HASURA_GRAPHQL_ADMIN_SECRET: z2tv52uL7kQ4MYYtXcNpNt8HrbzLYu93
   #
   # Chain crawler
   #
@@ -60,8 +60,8 @@ services:
       context: ../../
       dockerfile: ./docker/backend/crawler/Dockerfile
     depends_on:
-      - 'postgres'
-      - 'substrate-node'
+      - "postgres"
+      - "substrate-node"
     restart: on-failure
     environment:
       - NODE_ENV=production
@@ -69,6 +69,25 @@ services:
       - SUBSTRATE_NETWORK=subsocial
       # - CRAWLER_BLOCK_LISTENER_DISABLE=true
       # - CRAWLER_BLOCK_HARVESTER_DISABLE=true
+
+  #
+  # Auth Server
+  #
+  auth-server:
+    image: auth-server:latest
+    build:
+      context: ./
+      dockerfile: ./docker/backend/auth-server/Dockerfile
+    depends_on:
+      - "postgres"
+      - "graphql-engine"
+    ports:
+      - "3000:3000"
+    restart: on-failure
+    environment:
+      - ENCRYPTION_KEY=elcieloestaenladrilladoquienlodesenladrillara
+      - DATABASE_URL=postgres://polkastats:polkastats@postgres:5432/polkastats
+      - PORT=3000
 #
 # Persisten volumes
 #
