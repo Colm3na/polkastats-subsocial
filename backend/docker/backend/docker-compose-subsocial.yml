@@ -49,7 +49,6 @@ services:
       HASURA_GRAPHQL_DATABASE_URL: postgres://polkastats:polkastats@postgres:5432/polkastats
       HASURA_GRAPHQL_ENABLE_CONSOLE: "true" # set to "false" to disable console
       HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
-      HASURA_GRAPHQL_JWT_SECRET: '{"type": "HS256","key": "elcieloestaenladrilladoquienlodesenladrillara"}'
       HASURA_GRAPHQL_ADMIN_SECRET: z2tv52uL7kQ4MYYtXcNpNt8HrbzLYu93
   #
   # Chain crawler
@@ -70,24 +69,6 @@ services:
       # - CRAWLER_BLOCK_LISTENER_DISABLE=true
       # - CRAWLER_BLOCK_HARVESTER_DISABLE=true
 
-  #
-  # Auth Server
-  #
-  auth-server:
-    image: auth-server:latest
-    build:
-      context: ./
-      dockerfile: ./docker/backend/auth-server/Dockerfile
-    depends_on:
-      - "postgres"
-      - "graphql-engine"
-    ports:
-      - "3000:3000"
-    restart: on-failure
-    environment:
-      - ENCRYPTION_KEY=elcieloestaenladrilladoquienlodesenladrillara
-      - DATABASE_URL=postgres://polkastats:polkastats@postgres:5432/polkastats
-      - PORT=3000
 #
 # Persisten volumes
 #
