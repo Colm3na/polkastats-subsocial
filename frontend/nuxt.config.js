@@ -29,7 +29,7 @@ export default {
   css: [network.theme],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: [],
+  plugins: ['~/plugins/apollo.client.js'],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
@@ -76,11 +76,7 @@ export default {
   },
   apollo: {
     clientConfigs: {
-      default: {
-        httpEndpoint: network.backendHttp,
-        wsEndpoint: network.backendWs,
-        websocketsOnly: true,
-      },
+      default: '~/plugins/apollo.client.js',
     },
   },
   bootstrapVue: {
