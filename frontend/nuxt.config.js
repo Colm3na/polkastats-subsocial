@@ -3,9 +3,6 @@ import { network } from './frontend.config.js'
 export default {
   // Disable server-side rendering: https://go.nuxtjs.dev/ssr-mode
   ssr: false,
-  env: {
-    hasuraHeader: process.env.HASURA_GRAPHQL_ADMIN_SECRET,
-  },
   // Target: https://go.nuxtjs.dev/config-target
   target: 'static',
 
