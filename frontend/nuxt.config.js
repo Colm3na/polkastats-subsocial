@@ -1,8 +1,11 @@
 import { network } from './frontend.config.js'
+
 export default {
   // Disable server-side rendering: https://go.nuxtjs.dev/ssr-mode
   ssr: false,
-
+  env: {
+    hasuraHeader: process.env.HASURA_GRAPHQL_ADMIN_SECRET,
+  },
   // Target: https://go.nuxtjs.dev/config-target
   target: 'static',
 
@@ -29,7 +32,7 @@ export default {
   css: [network.theme],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: ['~/plugins/apollo.client.js'],
+  plugins: [],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
@@ -76,7 +79,11 @@ export default {
   },
   apollo: {
     clientConfigs: {
-      default: '~/plugins/apollo.client.js',
+      default: {
+        httpEndpoint: network.backendHttp,
+        wsEndpoint: network.backendWs,
+        websocketsOnly: true,
+      },
     },
   },
   bootstrapVue: {
