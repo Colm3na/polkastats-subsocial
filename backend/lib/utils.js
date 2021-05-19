@@ -1,5 +1,8 @@
 // @ts-check
 const pino = require('pino');
+const { decodeAddress, encodeAddress } = require('@polkadot/keyring');
+const { hexToU8a, isHex } = require('@polkadot/util');
+const _ = require('lodash');
 
 const logger = pino();
 
