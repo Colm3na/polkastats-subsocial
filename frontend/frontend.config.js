@@ -1,8 +1,8 @@
 export const network = {
   id: 'subsocial',
   name: 'Subsocial',
-  tokenSymbol: 'SMN',
-  tokenDecimals: 12,
+  tokenSymbol: 'SUB',
+  tokenDecimals: 11,
   ss58Format: 28,
   coinGeckoDenom: undefined,
   nodeWs: 'wss://subsocial.polkastats.io/rpc',
