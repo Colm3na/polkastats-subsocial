@@ -49,7 +49,7 @@ services:
       HASURA_GRAPHQL_DATABASE_URL: postgres://polkastats:polkastats@postgres:5432/polkastats
       HASURA_GRAPHQL_ENABLE_CONSOLE: "false" # set to "false" to disable console
       HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
-      HASURA_GRAPHQL_CORS_DOMAIN: https://subsocial.polkastats.io
+      HASURA_GRAPHQL_CORS_DOMAIN: http://localhost:3000 https://subsocial.polkastats.io
       HASURA_GRAPHQL_UNAUTHORIZED_ROLE: public
       ## uncomment next line to set an admin secret
       # HASURA_GRAPHQL_ADMIN_SECRET: myadminsecretkey
