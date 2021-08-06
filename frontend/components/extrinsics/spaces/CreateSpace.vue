@@ -3,7 +3,7 @@
     <div v-if="activityOnly">
       Created space with
       <a
-        :href="`https://ipfs.io/api/v0/dag/get?arg=${args[2].IPFS}`"
+        :href="`https://ipfs.io/api/v0/dag/get?arg=${args[2].ipfs}`"
         target="_blank"
         >content</a
       >
@@ -41,7 +41,7 @@ export default {
   },
   async created() {
     await axios
-      .get(`https://ipfs.io/api/v0/dag/get?arg=${this.args[2].IPFS}`)
+      .get(`https://ipfs.io/api/v0/dag/get?arg=${this.args[2].ipfs}`)
       .then(({ data }) => {
         this.content = data
       })

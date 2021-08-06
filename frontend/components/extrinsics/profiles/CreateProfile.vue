@@ -33,7 +33,7 @@ export default {
   },
   async created() {
     await axios
-      .get(`https://ipfs.io/api/v0/dag/get?arg=${this.args[0].IPFS}`)
+      .get(`https://ipfs.io/api/v0/dag/get?arg=${this.args[0].ipfs}`)
       .then(({ data }) => {
         this.content = data
       })
