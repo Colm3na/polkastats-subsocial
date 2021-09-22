@@ -5,7 +5,7 @@ services:
   # Subsocial node
   #
   substrate-node:
-    image: dappforce/subsocial-node:latest
+    image: dappforce/subsocial-node:0.7.0
     hostname: substrate-node
     volumes:
       - "substrate-data:/data"
