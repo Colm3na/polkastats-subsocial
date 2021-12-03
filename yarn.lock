@@ -2806,7 +2806,7 @@
     remark "^13.0.0"
     unist-util-find-all-after "^3.0.2"
 
-"@subsocial/types@^0.6.5-dev.10":
+"@subsocial/types@^0.6.5-dev.11":
   version "0.6.5-dev.13"
   resolved "https://registry.yarnpkg.com/@subsocial/types/-/types-0.6.5-dev.13.tgz#9bd95fcad414acf6ecc6e15698b01c7f2e1107e3"
   integrity sha512-eHU/QDrcDJ6FfUQ36Nxf7iEy/lQjUH/jWuZ9sP/9FGp0oEv2O3OX5Jv5hvzMCLM/hgKequh9NiU/5ORjq1jaEQ==

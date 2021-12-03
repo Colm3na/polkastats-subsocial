@@ -1,6 +1,6 @@
 // @ts-check
 const { ApiPromise, WsProvider } = require('@polkadot/api');
-const { types } = require('@subsocial/types/substrate/preparedTypes');
+const { typesBundle } = require('@subsocial/types');
 const { zip } = require('lodash');
 const pino = require('pino');
 const { wait } = require('../utils.js');
@@ -162,7 +162,7 @@ const start = async (wsProviderUrl, pool, config) => {
   await wait(config.startDelay);
   logger.info(loggerOptions, 'Starting active accounts crawler...');
   const wsProvider = new WsProvider(wsProviderUrl);
-  const api = await ApiPromise.create({ provider: wsProvider, types });
+  const api = await ApiPromise.create({ provider: wsProvider, typesBundle });
 
   (async function run() {
     await exec(api, pool).catch((err) => logger.error(loggerOptions, `Error running crawler: ${err}`));

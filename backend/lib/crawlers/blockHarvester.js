@@ -1,6 +1,6 @@
 // @ts-check
 const { ApiPromise, WsProvider } = require('@polkadot/api');
-const { types } = require('@subsocial/types/substrate/preparedTypes');
+const { typesBundle } = require('@subsocial/types');
 const pino = require('pino');
 const {
   shortHash, storeExtrinsics, getDisplayName, wait,
@@ -17,7 +17,7 @@ module.exports = {
     logger.info(loggerOptions, 'Starting block harvester...');
     const startTime = new Date().getTime();
     const wsProvider = new WsProvider(wsProviderUrl);
-    const api = await ApiPromise.create({ provider: wsProvider, types });
+    const api = await ApiPromise.create({ provider: wsProvider, typesBundle });
 
     // Get gaps from block table
     const sqlSelect = `

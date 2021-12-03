@@ -18,7 +18,7 @@
     "@polkadot/api": "^6.10.3",
     "@polkadot/keyring": "^8.0.5",
     "@polkadot/util": "^8.0.5",
-    "@subsocial/types": "^0.6.5-dev.10",
+    "@subsocial/types": "^0.6.5-dev.11",
     "axios": "^0.21.1",
     "bignumber.js": "^9.0.1",
     "dotenv": "^8.2.0",

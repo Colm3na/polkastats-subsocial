@@ -1,7 +1,7 @@
 // @ts-check
 const pino = require('pino');
 const { ApiPromise, WsProvider } = require('@polkadot/api');
-const { types } = require('@subsocial/types/substrate/preparedTypes');
+const { typesBundle } = require('@subsocial/types');
 const { Pool } = require('pg');
 const { wait } = require('./utils.js');
 
@@ -37,14 +37,15 @@ class Backend {
           pool,
           crawler.config,
           this.config.substrateNetwork,
-        ));
+        ),
+      );
   }
 
   async getPolkadotAPI() {
     logger.info(`Connecting to ${this.config.wsProviderUrl}`);
 
     const provider = new WsProvider(this.config.wsProviderUrl);
-    const api = await ApiPromise.create({ provider, types });
+    const api = await ApiPromise.create({ provider, typesBundle });
     await api.isReady;
 
     logger.info('API is ready!');
