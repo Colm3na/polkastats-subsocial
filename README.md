@@ -2,6 +2,8 @@
 
 [PolkaStats](https://polkastats.io) block explorer for [Subsocial](https://subsocial.network/), an open platform for decentralized social networks and marketplaces.
 
+This repository is ARCHIVED, for latest version go to https://github.com/polkastats/polkastats
+
 ## Install
 
 Install mono-repo:
